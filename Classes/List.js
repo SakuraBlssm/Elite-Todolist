@@ -82,7 +82,16 @@ class List{
         this.removeTask(task);
     }
 
+    buttonPressedAddTask(){
+        this.addTask(new Task())
+        //refresh screen function here
+    }
 
+    deleteList(){
+        this.addTaskButton.remove()
+        listArray.splice(listArray.indexOf(this), listArray.indexOf(this)>= 0 ? 1 : 0);
+        refresh()
+    }
 
     toString(){
         let output = `List: ${this.name}\n`;
@@ -106,6 +115,7 @@ class List{
         const stringObj = JSON.stringify(this)
         localStorage.setItem(listID, stringObj);
     }
+    
 
 
     getFromLocalStorage(listId){
@@ -132,17 +142,22 @@ class List{
 
     show(x) {
         // box
-        rect(x, 10, 400, 1000);
+        rect(x, 10, 400, 1000, 15);
 
         // green box which represents uh some button perhaps
-        fill(0, 150, 0);
-        rect(x + 10, 20, 20, 20)
-        fill(255);
+        // fill(0, 150, 0);
+        // rect(x + 10, 20, 20, 20)
+        // fill(255);
+        this.addTaskButton = createButton(`Add Task`);
+        this.addTaskButton.position(x + 10, 20);
+        this.addTaskButton.mousePressed(() => this.deleteList());
 
         // red box for delete button maybe?
-        fill(150, 0, 0);
-        rect(x + 370, 20, 20, 20)
-        fill(255);
+        // fill(150, 0, 0);
+        // rect(x + 370, 20, 20, 20)
+        // fill(255);
+        let redButton = createButton(`Delete List`);
+        redButton.position(x + 310, 20);
 
         // title
         textAlign(CENTER, CENTER);
@@ -156,6 +171,10 @@ class List{
             each.show(x + 10, y);
             y += 130
         }
+    }
+
+    button(){
+        
     }
 
 }

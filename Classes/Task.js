@@ -61,7 +61,7 @@ class Task {
     show(x, y) {
 
         // main box
-        rect(x, y, 380, 120);
+        rect(x, y, 380, 120, 10);
 
         // green box which represents mark as done button maybe?
         fill(0, 150, 0);
