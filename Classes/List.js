@@ -37,19 +37,7 @@ class List{
         // set the position of the task
         task.setPosition(this.listStorage.length - 1);
 
-        // create callback functions so that the task can remotely control this list
-
-        // give the task a moveDown callback function which calls the list's moveDown method
-        task.moveDown = () => {
-            const currentIndex = this.listStorage.indexOf(task);
-            this.moveDown(currentIndex); // tell the list to move the task
-        };
-
-        // give the task a moveUp callback function which calls the list's moveUp method
-        task.moveUp = () => {
-            const currentIndex = this.listStorage.indexOf(task);
-            this.moveUp(currentIndex); // tell the list to move the task
-        };
+        
 
     }
 
@@ -104,18 +92,21 @@ class List{
     deleteListButtons(){
         this.addTaskButton.remove()
         this.deleteListButton.remove();
+        saveAllLists();
     }
     
     buttonPressedAddTask(){
         this.addTask(this.getNewTask())
         //this.addTask(new Task())
         refresh();
+        saveAllLists();
     }
 
     deleteTaskButtons(){
         for (let each of this.listStorage) {
             each.deleteTaskButtons();
         }
+        saveAllLists();
     }
 
     buttonPressedDeleteList(){
@@ -123,6 +114,7 @@ class List{
         this.deleteTaskButtons()
         listArray.splice(listArray.indexOf(this), listArray.indexOf(this)>= 0 ? 1 : 0);
         refresh();
+        saveAllLists();
     }
 
     toString(){
