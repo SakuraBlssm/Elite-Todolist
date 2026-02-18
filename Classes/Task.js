@@ -13,18 +13,18 @@ const DEFAULT_POSITION    = 0;
 const DEFAULT_FINISHED    = false;
 
 //confirm button settings (offsets so far)
-const CONFIRM_X_OFFSET    = 10
-const CONFIRM_Y_OFFSET    = 10
+const CONFIRM_X_OFFSET    = 10;
+const CONFIRM_Y_OFFSET    = 10;
 
 //cancel button settings (offsets so far)
-const CANCEL_X_OFFSET     = 350
-const CANCEL_Y_OFFSET     = 10
+const CANCEL_X_OFFSET     = 350;
+const CANCEL_Y_OFFSET     = 10;
 
 //text settings
-const TEXT_X_OFFSET       = 190
-const TEXT_X_PADDING      = 0   //not used yet
-const TEXT_Y_OFFSET       = 0   //not used yet
-const TEXT_Y_PADDING      = 30
+const TEXT_X_OFFSET       = 190;
+const TEXT_X_PADDING      = 0;   //not used yet
+const TEXT_Y_OFFSET       = 0;   //not used yet
+const TEXT_Y_PADDING      = 30;
 
 class Task {
     constructor(name, desc, status, position) { 
@@ -42,8 +42,7 @@ class Task {
         this.deleteTaskButton.hide();
         this.deleteTaskButton.mousePressed(() => this.buttonPressedDelete());
 
-        this.id = Math.floor(Date.now() / ((Math.random() * 10000) + 500))
-
+        this.id = Math.floor(Date.now() / ((Math.random() * 10000) + 500));
     }
 
     //getters and setters
@@ -72,9 +71,9 @@ class Task {
 
     //get the list class to remove this or something
     delete() {
-        this.setName("Deleted Task")
-        this.setDesc("")
-        this.setStatus(TASK_STATES.DELETED)
+        this.setName("Deleted Task");
+        this.setDesc("");
+        this.setStatus(TASK_STATES.DELETED);
     }
 
     //basically slides the position of the task up or down 1 spot (world record for fastest annihilation of the webapp)
@@ -107,14 +106,18 @@ class Task {
 
     buttonPressedMarkDone(){
         this.setCompleted();
-        refresh();
+        let list = this.getListTask();
+        list.moveTask(listArray[0], this);
+        console.log(this.id + " was marked as done");
+        //refresh();
     }
 
     buttonPressedDelete(){
-        let list = this.getListTask()
-        this.deleteTaskButtons()
+        let list = this.getListTask();
+        this.deleteTaskButtons();
         list.removeTask(this);
-        refresh();
+        console.log(this.id + " was deleted");
+        //refresh();
     }
 
     //gets the list that the task is in
@@ -122,7 +125,7 @@ class Task {
         for(let list of listArray){
             let storage = list.getStorage();
             if(storage.findIndex(t => t.id === this.id) != -1){
-                return list
+                return list;
             }
         }
     }
@@ -145,7 +148,8 @@ class Task {
         fill(0);
         text(this.name, x + TEXT_X_OFFSET, y + TEXT_Y_PADDING);
         text(this.description, x + TEXT_X_OFFSET, y + TEXT_Y_PADDING * 2);
-        fill(255, 0, 0);
+        if (this.status === "Todo") fill(255, 0, 0);
+        if (this.status === "Done") fill(0, 255, 0);
         text(this.status, x + TEXT_X_OFFSET, y + TEXT_Y_PADDING * 3);
         fill(255);
     }
