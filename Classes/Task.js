@@ -46,6 +46,10 @@ const CONFIRM_Y_OFFSET    = 10
 const CANCEL_X_OFFSET     = 350
 const CANCEL_Y_OFFSET     = 10
 
+//menu offset
+const MENU_X_OFFSET = 373
+const MENU_Y_OFFSET = 9
+
 //text settings
 const TEXT_X_OFFSET       = 190
 const TEXT_X_PADDING      = 0   //not used yet
@@ -65,13 +69,25 @@ class Task {
         this.finished    =             DEFAULT_FINISHED;
         this.Id          =             GenerateId()
 
-        this.markTask   vhbDoneButton = createButton(`Mark Done`);
+        this.markTaskDoneButton = createButton(`Mark Done`);
         this.markTaskDoneButton.hide();
         this.markTaskDoneButton.mousePressed(() => this.buttonPressedMarkDone());
         
         this.deleteTaskButton = createButton(`Delete Task`);
         this.deleteTaskButton.hide();
         this.deleteTaskButton.mousePressed(() => this.buttonPressedDelete());
+
+        this.moveTaskUpButton = createButton(`⬆️`);
+        this.moveTaskUpButton.hide();
+        this.moveTaskUpButton.mousePressed(() => this.slidePosition(1));
+        
+        this.moveTaskDownButton = createButton(`⬇️`);
+        this.moveTaskDownButton.hide();
+        this.moveTaskDownButton.mousePressed(() => this.slidePosition(-1));
+
+        this.menuButton = createButton(`≡`);
+        this.menuButton.hide();
+        this.menuButton.mousePressed(() => this.buttonPressedMenu());
 
         this.id = Math.floor(Date.now() / ((Math.random() * 10000) + 500))
 
@@ -108,13 +124,23 @@ class Task {
         this.setStatus(TASK_STATES.DELETED)
     }
 
-    //basically slides the position of the task up or down 1 spot (world record for fastest annihilation of the webapp)
+    //slides task down(-1), or up(1).
     slidePosition(direction) {
-        if (direction == 0) { //do not.
+        let list = this.getListTask();
+        const taskIndex = this.position
+
+        if(direction != -1 && direction != 1){
             return;
         }
-        let normDirection = direction / Math.abs(direction); //wizard spell to normalize the direction to either 1 or -1 (in theory)
-        this.setPosition(normDirection);
+
+        if(direction == -1){
+            list.moveDown(taskIndex);
+        }else if(direction == 1){
+            list.moveUp(taskIndex);
+        }
+        
+        refresh();
+        saveAllLists();
     }
     
 
@@ -130,11 +156,56 @@ class Task {
 
         return output;
     }
+    
+    showTaskMenu(){
+
+        if(!this.taskMenuOpen){
+            return;
+        }
+
+        const pos = {x: this.x, y: this.y};
+
+        // main box
+        push();
+        strokeWeight(5)
+        stroke(STROKE_COLOR.getColor())
+        rect(pos.x + MENU_X_OFFSET, pos.y + MENU_Y_OFFSET, 100, 105, 10);
+        pop();
+
+        // sets pos of buttons        
+        this.markTaskDoneButton.position(pos.x + MENU_X_OFFSET + 7, pos.y + MENU_Y_OFFSET + 7);
+        this.deleteTaskButton.position(pos.x + MENU_X_OFFSET + 7, pos.y + MENU_Y_OFFSET + 30);
+
+        //show move task up/down buttons
+        this.markTaskDoneButton.show();
+        this.deleteTaskButton.show();
+    }
+
+    hideMenuButtons(){
+        this.markTaskDoneButton.hide();
+        this.deleteTaskButton.hide();
+    }
 
     deleteTaskButtons(){
+        this.moveTaskUpButton.remove();
+        this.moveTaskDownButton.remove();
         this.markTaskDoneButton.remove();
         this.deleteTaskButton.remove();
+        this.menuButton.remove();
+
         saveAllLists();
+    }
+
+    buttonPressedMenu(){
+        if(!this.taskMenuOpen){
+            this.taskMenuOpen = true;
+            return;
+        }else if(this.taskMenuOpen){
+            this.taskMenuOpen = false;
+
+            this.hideMenuButtons();
+        }
+        
     }
 
     buttonPressedMarkDone(){
@@ -163,18 +234,23 @@ class Task {
 
     show(x, y) {
 
+        this.x = x;
+        this.y = y;
+
         // main box
         strokeWeight(5)
         stroke(STROKE_COLOR.getColor())
         rect(x, y, 380, 120, 10);
 
         // sets pos of buttons        
-        this.markTaskDoneButton.position(x + 10, y+10);
-        this.deleteTaskButton.position(x + 285, y+10);
+        this.moveTaskUpButton.position(x + 10, y+7);
+        this.moveTaskDownButton.position(x + 10, y+90);
+        this.menuButton.position(x + 345, y + 7);
 
-        //shows buttons
-        this.markTaskDoneButton.show();
-        this.deleteTaskButton.show();
+        //show move task up/down buttons
+        this.moveTaskUpButton.show();
+        this.moveTaskDownButton.show();
+        this.menuButton.show();
 
         strokeWeight(0)
         // text slop
@@ -196,6 +272,8 @@ class Task {
         text(this.status, x + TEXT_X_OFFSET, y + TEXT_Y_PADDING * 3);
 
         fill(WHY_IS_THIS_HERE.getColor()); //im confused on why were filling with white here lol (might be p5js jank)
+
+        
     }
 
     static fromJSON(data) {
