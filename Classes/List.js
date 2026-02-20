@@ -203,6 +203,7 @@ class List{
     }
 
     showTasks(x){
+        let verticalOffsetTop = 100;
         let y = 70 + verticalOffsetTop;
         for (let index = 0; index < this.listStorage.length; index++) { 
             let task = this.listStorage[index]
