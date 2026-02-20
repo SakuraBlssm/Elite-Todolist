@@ -45,11 +45,11 @@ function draw() {
   }
 }
 
-function saveAllLists(){
-  for(let i = 0; i < listArray.length; i++){
-    listArray[i].pushToLocalStorage(i.toString());
-  }
-}
+// function saveAllLists(){
+//   for(let i = 0; i < listArray.length; i++){
+//     listArray[i].pushToLocalStorage(i.toString());
+//   }
+// }
 
 
 
