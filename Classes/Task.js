@@ -165,6 +165,7 @@ class Task {
     editTask(){
         this.name = prompt("Input the task name.");
         this.description = prompt("Input the tasks description.");
+        this.buttonPressedMenu();
     }
     
     showTaskMenu(){
@@ -183,12 +184,12 @@ class Task {
         pop();
 
         // sets pos of buttons        
-        this.markTaskDoneButton.position(pos.x + MENU_X_OFFSET + 7, pos.y + MENU_Y_OFFSET + 7);
+        if (this.status === "Todo") this.markTaskDoneButton.position(pos.x + MENU_X_OFFSET + 7, pos.y + MENU_Y_OFFSET + 7);
         this.editTaskButton.position(pos.x + MENU_X_OFFSET + 7, pos.y + MENU_Y_OFFSET + 30);
         this.deleteTaskButton.position(pos.x + MENU_X_OFFSET + 7, pos.y + MENU_Y_OFFSET + 53);
 
         //show move task up/down buttons
-        this.markTaskDoneButton.show();
+        if (this.status === "Todo") this.markTaskDoneButton.show();
         this.editTaskButton.show();
         this.deleteTaskButton.show();
     }
@@ -237,6 +238,7 @@ class Task {
             }
         }
         console.log(this.id + " was marked as done");
+        this.buttonPressedMenu();
         refresh();
         saveAllLists();
     }
