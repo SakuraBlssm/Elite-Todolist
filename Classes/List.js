@@ -159,7 +159,8 @@ class List{
     }
 
     show(x) {
-        fill(255)
+        stroke(0);
+        fill(255);
         // box
         let verticalOffsetTop = 100;
         let verticalOffsetBottom = 125;

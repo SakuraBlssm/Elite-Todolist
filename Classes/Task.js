@@ -163,8 +163,10 @@ class Task {
     }
 
     editTask(){
-        this.name = prompt("Input the task name.");
-        this.description = prompt("Input the tasks description.");
+        let newName = prompt("Input the task name.");
+        let newDescription = prompt("Input the tasks description.");
+        if (newName !== "") this.name = newName;
+        if (newDescription !== "") this.description = newDescription;
         this.buttonPressedMenu();
     }
     
