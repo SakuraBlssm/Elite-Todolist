@@ -131,9 +131,12 @@ class List{
     toSaveString() {
         let saveString = ""
 
-        saveString += this.getName() + "&" //will always be 0 on split (hypothetically)
+        let listName = this.getName()
+        console.log(`List being saved: ${listName}`)
+        saveString += listName + "&" //will always be 0 on split (hypothetically)
 
-        for (let task in this.getStorage()) {
+        for (let task of this.getStorage()) {
+            console.log(`Task being saved: ${task.getName()}`)
             saveString += task.toSaveString() + "&"
         }
 
@@ -161,7 +164,7 @@ class List{
         let brokenString = saveString.split("&")
 
         this.name = brokenString[0]
-        this.listStorage = {}
+        this.listStorage = []
 
         if (!brokenString[1]) { //early return if there arent any more values
             return
