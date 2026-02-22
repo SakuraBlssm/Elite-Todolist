@@ -270,8 +270,14 @@ class List{
 
 function convertTaskFromSaveString(saveString) { //generational amount of characters
     let brokenString = saveString.split("|") //Name, Desc, Status, Position, Id in that order
+
+    let savedName     = brokenString[0]
+    let savedDesc     = brokenString[1]
+    let savedStatus   = brokenString[2]
+    let savedPosition = parseInt(brokenString[3])
+    let savedId       = parseInt(brokenString[4])
     
     //might be an easier way to do this
-    let newTask = new Task(brokenString[0], brokenString[1], brokenString[2], brokenString[3].parseInt(), brokenString[4].parseInt()) 
+    let newTask = new Task(savedName, savedDesc, savedStatus, savedPosition, savedId) 
     return newTask
 }
