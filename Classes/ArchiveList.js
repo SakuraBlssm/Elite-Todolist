@@ -37,7 +37,7 @@ class ArchiveList extends List {
         // show all tasks in this list
         if(this.listStorage.length > 0){
             //console.log("show")
-            this.showTask(70 + verticalOffsetTop)
+            this.showTask(70 + verticalOffsetTop);
         }
     
     }
