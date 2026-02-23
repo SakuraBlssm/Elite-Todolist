@@ -3,6 +3,8 @@ const DEFAULT_LIST_NAME     = "New List";
 const LIST_TITLE_COLOR      = new Color();
 const LIST_BACKGROUND_COLOR = new Color(255);
 
+const LIST_BORDER_COLOR     = new Color(100, 230, 255)
+
 class List{
     constructor(name){
         this.name = name || DEFAULT_LIST_NAME;
@@ -48,8 +50,8 @@ class List{
     }
 
     getNewTask(){
-        let name =  prompt("Input the task name.");
-        let desc = prompt("Input the tasks description.");
+        let name = prompt("Input the task name:");
+        let desc = prompt("Input the task's description:");
         return new Task(name, desc);
     }
 
@@ -60,26 +62,38 @@ class List{
         this.listStorage[secondIndex] = temp;
     }
 
-    // this will swap the tasks at index and index + 1
-    moveDown(index){
+    // this will swap the tasks at index and index + direction (positive or negative 1)
+    move(index, direction){
         // do a safety check to avoid index out of range
-        if(index >= this.listStorage.length - 1){
+        if(index >= this.listStorage.length + direction){
             return;
         }
-        this.swapIndex(index, index + 1);
+
+        if (direction == 0) { //avoids dividing by zero and other stuff that will break the app
+            return
+        }
+
+        direction = direction / Math.abs(direction)
+        console.log(`Slide direction is ${direction}`)
+
+        if(direction != -1 && direction != 1){ //failsafe which isnt needed unless something evil happens
+            throw new error("something evil happened :c pls fix my direction calculation")
+        }
+        
+        this.swapIndex(index, index + direction);
         this.listStorage[index].setPosition(index);
-        this.listStorage[index + 1].setPosition(index + 1);;
+        this.listStorage[index + direction].setPosition(index + direction);;
     }
 
         // this will swap the tasks at index and index - 1
-    moveUp(index){
-        if(index <= 0 || index >= this.listStorage.length){
-            return;
-        }
-        this.swapIndex(index, index - 1);
-        this.listStorage[index].setPosition(index);
-        this.listStorage[index - 1].setPosition(index - 1);
-    }
+    // moveUp(index){
+    //     if(index <= 0 || index >= this.listStorage.length){
+    //         return;
+    //     }
+    //     this.swapIndex(index, index - 1);
+    //     this.listStorage[index].setPosition(index);
+    //     this.listStorage[index - 1].setPosition(index - 1);
+    // }
 
     moveTask(list, task){
         list.addTask(task);
@@ -133,11 +147,12 @@ class List{
 
         let listName = this.getName()
         console.log(`List being saved: ${listName}`)
-        saveString += listName + "&" //will always be 0 on split (hypothetically)
+        saveString += listName //will always be 0 on split (hypothetically)
 
         for (let task of this.getStorage()) {
             console.log(`Task being saved: ${task.getName()}`)
-            saveString += task.toSaveString() + "&"
+            saveString += "&"
+            saveString += task.toSaveString()
         }
 
         return saveString
@@ -166,7 +181,7 @@ class List{
         this.name = brokenString[0]
         this.listStorage = []
 
-        if (!brokenString[1]) { //early return if there arent any more values
+        if (!brokenString[1]) { //early return if there arent any more values (saved list is empty)
             return
         }
         for (let taskNum = 1; taskNum < brokenString.length; taskNum++) {

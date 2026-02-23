@@ -22,17 +22,29 @@ const STATUS_SIZE         = 16
 const TEXT_FONT           = "Courier New" //TODO: change the font to something thats actually good (this is just one i picked randomly)
 
 //colors, lots of colors
-const BACKGROUND_COLORS    = [new Color(58, 110, 165), new Color(192, 192, 192), new Color(161, 130, 118), new Color(55, 18, 60), new Color(27, 48, 34), new Color(114, 97, 163), new Color(212, 81, 19), new Color(60, 110, 113), new Color(58, 90, 64), new Color(52, 78, 65)]
-const NAME_COLOR          = new Color(0,   0,   0)
-const DESC_COLOR          = new Color(100, 100, 100)
-const WHY_IS_THIS_HERE    = new Color(255, 255, 255)
+const BACKGROUND_COLORS   = [
+    new Color(58, 110, 165), 
+    new Color(192), 
+    new Color(161, 130, 118), 
+    new Color(55, 18, 60), 
+    new Color(27, 48, 34), 
+    new Color(114, 97, 163), 
+    new Color(212, 81, 19), 
+    new Color(60, 110, 113), 
+    new Color(58, 90, 64), 
+    new Color(52, 78, 65)
+]
+const NAME_COLOR          = new Color()
+const DESC_COLOR          = new Color(100)
+const DEFAULT_WHITE       = new Color(255)
 
-const TASK_FILL           = new Color(255, 255, 255)
+const TASK_FILL           = new Color(255)
 const STROKE_COLOR        = new Color(100, 230, 255)
 const STATUS_COLORS       = {
-    Todo: new Color(255, 0,   0),
-    Doing: new Color(255, 255, 0),
-    Done: new Color(0,   255, 0),
+    Default: new Color(),
+    Todo:    new Color(255, 0,   0),
+    Doing:   new Color(255, 255, 0),
+    Done:    new Color(0,   255, 0),
 }
 
 //confirm button settings (offsets so far)
@@ -133,15 +145,13 @@ class Task {
         let list = this.getListTask();
         const taskIndex = this.position
 
-        if(direction != -1 && direction != 1){
-            return;
-        }
+        list.move(taskIndex, direction)
 
-        if(direction == -1){
-            list.moveDown(taskIndex);
-        }else if(direction == 1){
-            list.moveUp(taskIndex);
-        }
+        // if(direction == -1){
+        //     list.moveDown(taskIndex);
+        // }else if(direction == 1){
+        //     list.moveUp(taskIndex);
+        // }
         
         refresh();
         saveAllLists();
@@ -174,15 +184,18 @@ class Task {
         return saveString
     }
     editTask(){
-        let newName = prompt("Input the task name.");
-        let newDescription = prompt("Input the tasks description.");
-        if (newName !== "") this.name = newName;
-        if (newDescription !== "") this.description = newDescription;
+        let newName = prompt("Input the task name:");
+        let newDescription = prompt("Input the task's description:");
+        if (newName !== "") {
+            this.setName(newName);
+        }
+        if (newDescription !== "") {
+            this.setDesc(newDescription);
+        }
         this.buttonPressedMenu();
     }
     
     showTaskMenu(){
-
         if(!this.taskMenuOpen){
             return;
         }
@@ -228,12 +241,11 @@ class Task {
         if(!this.taskMenuOpen){
             this.taskMenuOpen = true;
             return;
-        }else if(this.taskMenuOpen){
-            this.taskMenuOpen = false;
-
-            this.hideMenuButtons();
         }
-        
+        //else if(this.taskMenuOpen){
+        this.taskMenuOpen = false;
+        this.hideMenuButtons();
+        //}
     }
 
     buttonPressedMarkDone(){
@@ -268,7 +280,7 @@ class Task {
     getListTask(){
         for(let list of listArray){
             let storage = list.getStorage();
-            if(storage.findIndex(t => t.Id === this.Id) != -1){
+            if(storage.findIndex(task => task.id === this.id) != -1){
                 return list;
             }
         }
@@ -312,14 +324,12 @@ class Task {
         text(this.description, x + TEXT_X_OFFSET, y + TEXT_Y_PADDING * 2);
 
         //status
-        fill(STATUS_COLORS[this.status].getColor() || new Color(0,0,0).getColor());
+        fill(STATUS_COLORS[this.status].getColor() || STATUS_COLORS["Default"].getColor());
         textSize(STATUS_SIZE)
         text(this.status, x + TEXT_X_OFFSET, y + TEXT_Y_PADDING * 3);
 
-        fill(WHY_IS_THIS_HERE.getColor()); //im confused on why were filling with white here lol (might be p5js jank)
+        fill(DEFAULT_WHITE.getColor());
         strokeWeight(1);
-
-        
     }
 
     static fromJSON(data) {
