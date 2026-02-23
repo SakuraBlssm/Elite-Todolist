@@ -73,16 +73,22 @@ class List{
             return
         }
 
-        direction = direction / Math.abs(direction)
+        direction = (-direction / Math.abs(direction))
         console.log(`Slide direction is ${direction}`)
 
         if(direction != -1 && direction != 1){ //failsafe which isnt needed unless something evil happens
             throw new error("something evil happened :c pls fix my direction calculation")
         }
+
+        let otherTaskIndex = index + direction
+
+        if (!this.listStorage[otherTaskIndex]) { //returns if theres nothing beyond the task
+            return
+        }
         
-        this.swapIndex(index, index + direction);
+        this.swapIndex(index, otherTaskIndex);
         this.listStorage[index].setPosition(index);
-        this.listStorage[index + direction].setPosition(index + direction);;
+        this.listStorage[otherTaskIndex].setPosition(otherTaskIndex);;
     }
 
         // this will swap the tasks at index and index - 1
