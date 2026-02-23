@@ -32,7 +32,7 @@
             let blank = new List();
 
             AssertEqual("New List", blank.getName())
-            AssertEqual([], blank.getStorage())
+            AssertEqual(JSON.stringify([]), JSON.stringify(blank.getStorage()))
         }
 
         //assuming that task works properly (i might be making ming look ridiculous)
