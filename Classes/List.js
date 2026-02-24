@@ -115,6 +115,11 @@ class List{
         }
     }
 
+    /**
+     * 
+     * @param {*} list list to move task to.
+     * @param {*} task task to move from this list.
+     */
     moveTask(list, task){
         list.addTask(task);
         this.removeTask(task);

@@ -50,12 +50,12 @@ class Menu {
         let list = this.getListTask();
         for (let i = 0; i < listArray.length; i++) {
             if (listArray[i].getName() === "Archive") {
-                list.moveTask(listArray[i], this);
+                list.moveTask(listArray[i], this.task);
                 break;
             }
             if (i === listArray.length - 1) {
-                listArray.push(new ArchiveList);
-                list.moveTask(listArray[i + 1], this);
+                listArray.push(new ArchiveList("Archive"));
+                list.moveTask(listArray[i + 1], this.task);
                 break;
             }
         }
