@@ -4,7 +4,7 @@ const TASK_STATES = {
     DONE: "Done",
     ARCHIVED: "Archived",
     DELETED: "Deleted"
-}
+};
 
 //defaults for instance vars
 const DEFAULT_TASK_NAME   = "New Task";
@@ -19,7 +19,7 @@ const DESC_SIZE           = 16;
 const STATUS_SIZE         = 16;
 
 //text font
-const TEXT_FONT           = "Courier New" //TODO: change the font to something thats actually good (this is just one i picked randomly)
+const TEXT_FONT           = "Courier New"; //TODO: change the font to something thats actually good (this is just one i picked randomly)
 
 //colors, lots of colors
 const BACKGROUND_COLORS   = [
@@ -33,19 +33,19 @@ const BACKGROUND_COLORS   = [
     new Color(60, 110, 113), 
     new Color(58, 90, 64), 
     new Color(52, 78, 65)
-]
-const NAME_COLOR          = new Color()
-const DESC_COLOR          = new Color(100)
-const DEFAULT_WHITE       = new Color(255)
+];
+const NAME_COLOR          = new Color();
+const DESC_COLOR          = new Color(100);
+const DEFAULT_WHITE       = new Color(255);
 
-const TASK_FILL           = new Color(255)
-const STROKE_COLOR        = new Color(100, 230, 255)
+const TASK_FILL           = new Color(255);
+const STROKE_COLOR        = new Color(100, 230, 255);
 const STATUS_COLORS       = {
     Default: new Color(),
     Todo:    new Color(255, 0,   0),
     Doing:   new Color(255, 255, 0),
     Done:    new Color(0,   255, 0),
-}
+};
 
 //confirm button settings (offsets so far)
 const CONFIRM_X_OFFSET    = 10;
@@ -77,9 +77,9 @@ class Task {
         // this.id          = id       || Math.floor(Date.now() / ((Math.random() * 10000) + 500))
         this.bgColor = random(BACKGROUND_COLORS).getColor();
 
-        this.id = Math.floor(Date.now() / ((Math.random() * 10000) + 500))
+        this.id = Math.floor(Date.now() / ((Math.random() * 10000) + 500));
 
-        this.menu = new Menu(0,0, 100, 105,color(this.bgColor[0],this.bgColor[1],this.bgColor[2]), color(STROKE_COLOR.getColor()[0],STROKE_COLOR.getColor()[1],STROKE_COLOR.getColor()[2]), this)
+        this.menu = new Menu(0,0, 100, 105,color(this.bgColor[0],this.bgColor[1],this.bgColor[2]), color(STROKE_COLOR.getColor()[0],STROKE_COLOR.getColor()[1],STROKE_COLOR.getColor()[2]), this);
 
     }
 
@@ -118,13 +118,13 @@ class Task {
 
     //methods
     toString() {
-        let output = ""
+        let output = "";
 
-        output += `Name: ${this.name}\n`
-        output += `Description: ${this.description}\n`
-        output += `Status: ${this.status}\n`
-        output += `Position: ${this.position}\n`
-        output += `Is Finished: ${this.finished}`
+        output += `Name: ${this.name}\n`;
+        output += `Description: ${this.description}\n`;
+        output += `Status: ${this.status}\n`;
+        output += `Position: ${this.position}\n`;
+        output += `Is Finished: ${this.finished}`;
 
         return output;
     }
@@ -132,16 +132,16 @@ class Task {
    toSaveString() {
         let saveString = ""
 
-        saveString += this.getName() + "|"
-        saveString += this.getDesc() + "|"
-        saveString += this.getStatus() + "|"
-        saveString += this.getPosition() + "|"
-        saveString += this.getId() + ""
+        saveString += this.getName() + "|";
+        saveString += this.getDesc() + "|";
+        saveString += this.getStatus() + "|";
+        saveString += this.getPosition() + "|";
+        saveString += this.getId() + "";
 
-        return saveString
+        return saveString;
     }
   
-    show(x, y) {
+    show(x, y, ) {
 
         this.x = x; // why is show (an accessor method) changing instance variables like a setter method?????
         this.y = y;
@@ -177,7 +177,7 @@ class Task {
 
         strokeWeight(0);
         // text slop
-        textFont(TEXT_FONT)/
+        textFont(TEXT_FONT);
         //name
         textAlign(CENTER, CENTER);
         fill(NAME_COLOR.getColor());
@@ -191,7 +191,7 @@ class Task {
 
         //status
         fill(STATUS_COLORS[this.status].getColor() || STATUS_COLORS["Default"].getColor());
-        textSize(STATUS_SIZE)
+        textSize(STATUS_SIZE);
         text(this.status, x + TEXT_X_OFFSET, y + TEXT_Y_PADDING * 3);
 
         fill(DEFAULT_WHITE.getColor());
