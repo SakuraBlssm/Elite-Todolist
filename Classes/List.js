@@ -42,11 +42,6 @@ class List{
 
         //remove task
         this.listStorage.splice(indx, indx >= 0 ? 1 : 0);
-
-        //move to archive
-        //todo
-
-        // ^ i dont really think we should, this works fine
     }
 
     getNewTask(){
@@ -62,11 +57,11 @@ class List{
             return;
         }
 
-        let temp = this.listStorage[firstIndex]
-        this.listStorage[firstIndex] = this.listStorage[secondIndex]
+        let temp = this.listStorage[firstIndex];
+        this.listStorage[firstIndex] = this.listStorage[secondIndex];
         this.listStorage[secondIndex] = temp;
 
-        this.setTasksPositions()
+        this.setTasksPositions();
     }
 
     // this will swap the tasks at index and index + direction (positive or negative 1)
@@ -77,20 +72,20 @@ class List{
         // }
 
         if (direction == 0) { //avoids dividing by zero and other stuff that will break the app
-            return
+            return;
         }
 
-        direction = (-direction / Math.abs(direction))
-        console.log(`Slide direction is ${direction}`)
+        direction = (-direction / Math.abs(direction));
+        console.log(`Slide direction is ${direction}`);
 
         if(direction != -1 && direction != 1){ //failsafe which isnt needed unless something evil happens
-            throw new error("something evil happened :c pls fix my direction calculation")
+            throw new error("something evil happened :c pls fix my direction calculation");
         }
 
-        let otherTaskIndex = index + direction
+        let otherTaskIndex = index + direction;
 
         if (!this.listStorage[otherTaskIndex]) { //returns if theres nothing beyond the task
-            return
+            return;
         }
         
         this.swapIndex(index, otherTaskIndex);
@@ -126,15 +121,15 @@ class List{
     }
 
     deleteListButtons(){
-        this.addTaskButton.remove()
+        this.addTaskButton.remove();
         this.deleteListButton.remove();
         saveAllLists();
     }
     
     buttonPressedAddTask(){
-        this.addTask(getNewTask())
-        //this.addTask(new Task())
-        hideAllMenus()
+        this.addTask(getNewTask());
+        //this.addTask(new Task());
+        hideAllMenus();
         refresh();
         saveAllLists();
     }
@@ -147,8 +142,8 @@ class List{
     }
 
     buttonPressedDeleteList(){
-        this.deleteListButtons()
-        this.deleteTaskButtons()
+        this.deleteListButtons();
+        this.deleteTaskButtons();
         localStorage.clear();
         listArray.splice(listArray.indexOf(this), listArray.indexOf(this)>= 0 ? 1 : 0);
         hideAllMenus()
@@ -170,52 +165,52 @@ class List{
     }
 
     toSaveString() {
-        let saveString = ""
+        let saveString = "";
 
-        let listName = this.getName()
-        console.log(`List being saved: ${listName}`)
-        saveString += listName //will always be 0 on split (hypothetically)
+        let listName = this.getName();
+        console.log(`List being saved: ${listName}`);
+        saveString += listName; //will always be 0 on split (hypothetically)
 
         for (let task of this.getStorage()) {
-            console.log(`Task being saved: ${task.getName()}`)
-            saveString += "&"
-            saveString += task.toSaveString()
+            console.log(`Task being saved: ${task.getName()}`);
+            saveString += "&";
+            saveString += task.toSaveString();
         }
 
-        return saveString
+        return saveString;
     }
 
     //will need worked on a bit when we get multiple lists
     pushToLocalStorage(listID){
         // console.log("pushToLocalStorage is currently broken and has been disabled")
-        console.warn("Attempting to save the list...")
+        console.warn("Attempting to save the list...");
         //uploads the obj it to local storage under the key name of what ever is stored in listID
         //const stringObj = JSON.stringify(this.toSaveString())
-        let stringObj = this.toSaveString()
+        let stringObj = this.toSaveString();
         localStorage.setItem(listID, stringObj);
 
-        console.log("List saved successfully (maybe)!")
+        console.log("List saved successfully (maybe)!");
     }
 
     loadFromLocalStorage(listId) {
-        let saveString = localStorage.getItem(listId)
+        let saveString = localStorage.getItem(listId);
         if (!saveString) {
-            return
+            return;
         }
 
-        let brokenString = saveString.split("&")
+        let brokenString = saveString.split("&");
 
-        this.name = brokenString[0]
-        this.listStorage = []
+        this.name = brokenString[0];
+        this.listStorage = [];
 
         if (!brokenString[1]) { //early return if there arent any more values (saved list is empty)
             return
         }
         for (let taskNum = 1; taskNum < brokenString.length; taskNum++) {
-            let taskSave = brokenString[taskNum]
-            let newTask = convertTaskFromSaveString(taskSave)
+            let taskSave = brokenString[taskNum];
+            let newTask = convertTaskFromSaveString(taskSave);
 
-            this.listStorage.push(newTask) //hope this supports the whole id thing
+            this.listStorage.push(newTask); //hope this supports the whole id thing
         }
     }
 
@@ -269,7 +264,7 @@ class List{
 
         // title
         strokeWeight(0);
-        textFont(TEXT_FONT)
+        textFont(TEXT_FONT);
         textAlign(CENTER, CENTER);
         textSize(24);
         fill(LIST_TITLE_COLOR.getColor());
@@ -280,7 +275,7 @@ class List{
 
         // show all tasks in this list
         if(this.listStorage.length > 0){
-            //console.log("show")
+            //console.log("show");
             this.showTasks(x)
         }
     }
@@ -289,7 +284,7 @@ class List{
         let verticalOffsetTop = 100;
         let y = 70 + verticalOffsetTop;
         for (let index = 0; index < this.listStorage.length; index++) { 
-            let task = this.listStorage[index]
+            let task = this.listStorage[index];
             task.show(x + 10, y + (130 * index));
         }
     }
@@ -302,14 +297,14 @@ class List{
 
 
 //     showTask(y){
-//         let taskSpacing = 150;// has to be < 130
+//         let taskSpacing = 150;// has to be < 130;
 //         for (let each of this.listStorage) {
 //             each.show(x + 10, y);
 //             y += taskSpacing;
 //         }
 //         y = 70;
 //         for (let each of this.listStorage) {
-//             each.showTaskMenu()
+//             each.showTaskMenu();
 //             y += 130;
 //         }
 //     }
@@ -317,16 +312,16 @@ class List{
 }
 
 function convertTaskFromSaveString(saveString) { //generational amount of characters
-    let brokenString = saveString.split("|") //Name, Desc, Status, Position, Id in that order
+    let brokenString = saveString.split("|"); //Name, Desc, Status, Position, Id in that order
 
-    let savedName     = brokenString[0]
-    let savedDesc     = brokenString[1]
-    let savedStatus   = brokenString[2]
-    let savedPosition = parseInt(brokenString[3])
-    let savedId       = parseInt(brokenString[4])
-    let savedColor    = parseColor(brokenString[5])
+    let savedName     = brokenString[0];
+    let savedDesc     = brokenString[1];
+    let savedStatus   = brokenString[2];
+    let savedPosition = parseInt(brokenString[3]);
+    let savedId       = parseInt(brokenString[4]);
+    let savedColor    = parseColor(brokenString[5]);
     
     //might be an easier way to do this
-    let newTask = new Task(savedName, savedDesc, savedStatus, savedPosition, savedId, savedColor) 
-    return newTask
+    let newTask = new Task(savedName, savedDesc, savedStatus, savedPosition, savedId, savedColor) ;
+    return newTask;
 }
