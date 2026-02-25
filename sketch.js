@@ -15,7 +15,7 @@ function setup() {
     let list = new List();
     list.loadFromLocalStorage(i.toString());
     if (list.name === "Archive") {
-      let archive = new ArchiveList()
+      let archive = new ArchiveList();
       archive.loadFromLocalStorage(i.toString());
       listArray.push(archive);
     } else {
