@@ -208,6 +208,8 @@ class Task {
 
         fill(DEFAULT_WHITE.getColor());
         strokeWeight(1);
+
+        this.menu.show();
     }
 
     static fromJSON(data) {
