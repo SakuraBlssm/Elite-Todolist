@@ -151,7 +151,8 @@ class Menu {
     editTask(){
         this.task.name = prompt("Input the task name:");
         this.task.description = prompt("Input the task's description:");
-        hideAllMenus()
+        hideAllMenus();
+        saveAllLists();
     }
 
     slidePosition(direction) {
