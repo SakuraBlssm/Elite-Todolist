@@ -38,7 +38,7 @@ class List{
 
     removeTask(task){
         let storage = this.getStorage();
-        const indx = storage.findIndex(t => t.Id === task.Id);
+        const indx = storage.findIndex(t => t.id === task.id);
 
         //remove task
         this.listStorage.splice(indx, indx >= 0 ? 1 : 0);
@@ -57,17 +57,24 @@ class List{
 
     //swap the first index with the second index
     swapIndex(firstIndex, secondIndex){
-        let temp = this.listStorage[firstIndex];
-        this.listStorage[firstIndex] = this.listStorage[secondIndex];
+
+        if(secondIndex < 0 || secondIndex >= this.listStorage.length){
+            return;
+        }
+
+        let temp = this.listStorage[firstIndex]
+        this.listStorage[firstIndex] = this.listStorage[secondIndex]
         this.listStorage[secondIndex] = temp;
+
+        this.setTasksPositions()
     }
 
     // this will swap the tasks at index and index + direction (positive or negative 1)
     move(index, direction){
         // do a safety check to avoid index out of range
-        if(index >= this.listStorage.length + direction){
-            return;
-        }
+        // if(index >= this.listStorage.length + direction){
+        //     return;
+        // }
 
         if (direction == 0) { //avoids dividing by zero and other stuff that will break the app
             return;
@@ -88,7 +95,7 @@ class List{
         
         this.swapIndex(index, otherTaskIndex);
         this.listStorage[index].setPosition(index);
-        this.listStorage[otherTaskIndex].setPosition(otherTaskIndex);;
+        this.listStorage[otherTaskIndex].setPosition(otherTaskIndex);
     }
 
         // this will swap the tasks at index and index - 1
@@ -101,6 +108,18 @@ class List{
     //     this.listStorage[index - 1].setPosition(index - 1);
     // }
 
+    setTasksPositions(){
+        let storage = this.listStorage;
+        for(let x = 0; x < this.listStorage.length; x++){
+            storage[x].setPosition(x);
+        }
+    }
+
+    /**
+     * 
+     * @param {*} list list to move task to.
+     * @param {*} task task to move from this list.
+     */
     moveTask(list, task){
         list.addTask(task);
         this.removeTask(task);
@@ -113,15 +132,16 @@ class List{
     }
     
     buttonPressedAddTask(){
-        this.addTask(getNewTask());
-        //this.addTask(new Task());
+        this.addTask(getNewTask())
+        //this.addTask(new Task())
+        hideAllMenus()
         refresh();
         saveAllLists();
     }
 
     deleteTaskButtons(){
         for (let task of this.getStorage()) {
-            task.deleteTaskButtons();
+            task.menu.deleteTaskButtons();
         }
         saveAllLists();
     }
@@ -131,6 +151,7 @@ class List{
         this.deleteTaskButtons();
         localStorage.clear();
         listArray.splice(listArray.indexOf(this), listArray.indexOf(this)>= 0 ? 1 : 0);
+        hideAllMenus()
         refresh();
         saveAllLists();
     }
@@ -273,6 +294,12 @@ class List{
         }
     }
 
+    hideTasksMenus(){
+        for(let task of this.listStorage){
+            task.menu.closeMenu();
+        }
+    }
+
 
 //     showTask(y){
 //         let taskSpacing = 150;// has to be < 130
@@ -292,13 +319,14 @@ class List{
 function convertTaskFromSaveString(saveString) { //generational amount of characters
     let brokenString = saveString.split("|"); //Name, Desc, Status, Position, Id in that order
 
-    let savedName     = brokenString[0];
-    let savedDesc     = brokenString[1];
-    let savedStatus   = brokenString[2];
-    let savedPosition = parseInt(brokenString[3]);
-    let savedId       = parseInt(brokenString[4]);
+    let savedName     = brokenString[0]
+    let savedDesc     = brokenString[1]
+    let savedStatus   = brokenString[2]
+    let savedPosition = parseInt(brokenString[3])
+    let savedId       = parseInt(brokenString[4])
+    let savedColor    = parseColor(brokenString[5])
     
     //might be an easier way to do this
-    let newTask = new Task(savedName, savedDesc, savedStatus, savedPosition, savedId);
-    return newTask;
+    let newTask = new Task(savedName, savedDesc, savedStatus, savedPosition, savedId, savedColor) 
+    return newTask
 }
