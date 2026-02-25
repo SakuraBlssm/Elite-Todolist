@@ -4,7 +4,7 @@ const MENU_Y_OFFSET = 6
 
 class Menu {
 
-    constructor(x, y, width, height, bgColor, borderColor, task){
+    constructor(x, y, width, height, bgColor, borderColor, task) {
         this.x = x;
         this.y = y;
         this.width = width;
@@ -16,7 +16,7 @@ class Menu {
         this.markTaskDoneButton = createButton(`Mark Done`);
         this.markTaskDoneButton.hide();
         this.markTaskDoneButton.mousePressed(() => this.buttonPressedMarkDone());
-        
+
         this.deleteTaskButton = createButton(`Delete Task`);
         this.deleteTaskButton.hide();
         this.deleteTaskButton.mousePressed(() => this.buttonPressedDelete());
@@ -28,7 +28,7 @@ class Menu {
         this.moveTaskUpButton = createButton(`⬆️`);
         this.moveTaskUpButton.hide();
         this.moveTaskUpButton.mousePressed(() => this.slidePosition(-1));
-        
+
         this.moveTaskDownButton = createButton(`⬇️`);
         this.moveTaskDownButton.hide();
         this.moveTaskDownButton.mousePressed(() => this.slidePosition(1));
@@ -41,11 +41,11 @@ class Menu {
 
     }
 
-    deleteMenu(){
+    deleteMenu() {
         this.mainBox.remove();
     }
 
-    buttonPressedMarkDone(){
+    buttonPressedMarkDone() {
         this.task.setCompleted();
         let list = this.getListTask();
         for (let i = 0; i < listArray.length; i++) {
@@ -59,14 +59,14 @@ class Menu {
                 break;
             }
         }
-        console.log(this.id + " was marked as done");
+        // console.log(this.id + " was marked as done");
         list.setTasksPositions()
         hideAllMenus()
         refresh();
         saveAllLists();
     }
 
-    buttonPressedDelete(){
+    buttonPressedDelete() {
         let list = this.getListTask();
         this.deleteTaskButtons();
         list.removeTask(this.task);
@@ -77,23 +77,23 @@ class Menu {
         saveAllLists();
     }
 
-    closeMenu(){
+    closeMenu() {
         this.taskMenuOpen = false;
         this.hideMenuButtons();
     }
 
-    buttonPressedMenu(){
-        if(!this.taskMenuOpen){
+    buttonPressedMenu() {
+        if (!this.taskMenuOpen) {
             hideAllMenus()
             this.taskMenuOpen = true;
             return;
-        }else if(this.taskMenuOpen){
+        } else if (this.taskMenuOpen) {
             this.closeMenu();
         }
-        
+
     }
 
-    deleteTaskButtons(){
+    deleteTaskButtons() {
         this.moveTaskUpButton.remove();
         this.moveTaskDownButton.remove();
         this.markTaskDoneButton.remove();
@@ -102,13 +102,13 @@ class Menu {
         this.menuButton.remove();
     }
 
-    show(){
+    show() {
 
-        if(!this.taskMenuOpen){
+        if (!this.taskMenuOpen) {
             return;
         }
 
-        const pos = {x: this.x, y: this.y};
+        const pos = { x: this.x, y: this.y };
 
         // main box
         this.mainBox.position(this.x + MENU_X_OFFSET, this.y + MENU_Y_OFFSET);
@@ -141,14 +141,14 @@ class Menu {
         this.deleteTaskButton.style('position', 'absolute');
     }
 
-    hideMenuButtons(){
+    hideMenuButtons() {
         this.markTaskDoneButton.hide();
         this.deleteTaskButton.hide();
         this.editTaskButton.hide();
         this.mainBox.hide();
     }
 
-    editTask(){
+    editTask() {
         this.task.name = prompt("Input the task name:");
         this.task.description = prompt("Input the task's description:");
         hideAllMenus()
@@ -156,29 +156,29 @@ class Menu {
 
     slidePosition(direction) {
         let list = this.getListTask();
-        console.log(list);
+        // console.log(list);
         let taskIndex = this.task.position
 
         if (direction == 0) { //avoids dividing by zero and other stuff that will break the app
             return
         }
 
-        if(direction != -1 && direction != 1){ //failsafe which isnt needed unless something evil happens
+        if (direction != -1 && direction != 1) { //failsafe which isnt needed unless something evil happens
             throw new error("something evil happened :c pls fix my direction calculation")
         }
 
         list.move(taskIndex, direction)
-        
+
         hideAllMenus()
         refresh();
         saveAllLists();
     }
 
     //gets the list that the task is in
-    getListTask(){
-        for(let list of listArray){
+    getListTask() {
+        for (let list of listArray) {
             let storage = list.getStorage();
-            if(storage.findIndex(t => t.id === this.task.id) != -1){
+            if (storage.findIndex(t => t.id === this.task.id) != -1) {
                 return list;
             }
         }
