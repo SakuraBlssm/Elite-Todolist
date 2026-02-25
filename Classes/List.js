@@ -1,12 +1,12 @@
-const DEFAULT_LIST_NAME     = "New List";
+const DEFAULT_LIST_NAME = "New List";
 
-const LIST_TITLE_COLOR      = new Color();
+const LIST_TITLE_COLOR = new Color();
 const LIST_BACKGROUND_COLOR = new Color(255);
 
-const LIST_BORDER_COLOR     = new Color(100, 230, 255)
+const LIST_BORDER_COLOR = new Color(100, 230, 255)
 
-class List{
-    constructor(name){
+class List {
+    constructor(name) {
         this.name = name || DEFAULT_LIST_NAME;
         this.listStorage = [];
 
@@ -20,23 +20,23 @@ class List{
     }
 
     //Getters
-    getStorage(){
+    getStorage() {
         return this.listStorage;
     }
 
-    getName(){
+    getName() {
         return this.name;
     }
 
     //Adds Task object to storage in List object.
-    addTask(task){
+    addTask(task) {
         this.listStorage.push(task);
         // set the position of the task
         task.setPosition(this.listStorage.length - 1);
 
     }
 
-    removeTask(task){
+    removeTask(task) {
         let storage = this.getStorage();
         const indx = storage.findIndex(t => t.id === task.id);
 
@@ -44,16 +44,16 @@ class List{
         this.listStorage.splice(indx, indx >= 0 ? 1 : 0);
     }
 
-    getNewTask(){
+    getNewTask() {
         let name = prompt("Input the task name:");
         let desc = prompt("Input the task's description:");
         return new Task(name, desc);
     }
 
     //swap the first index with the second index
-    swapIndex(firstIndex, secondIndex){
+    swapIndex(firstIndex, secondIndex) {
 
-        if(secondIndex < 0 || secondIndex >= this.listStorage.length){
+        if (secondIndex < 0 || secondIndex >= this.listStorage.length) {
             return;
         }
 
@@ -65,7 +65,7 @@ class List{
     }
 
     // this will swap the tasks at index and index + direction (positive or negative 1)
-    move(index, direction){
+    move(index, direction) {
         // do a safety check to avoid index out of range
         // if(index >= this.listStorage.length + direction){
         //     return;
@@ -75,11 +75,11 @@ class List{
             return;
         }
 
-        direction = (-direction / Math.abs(direction));
-        console.log(`Slide direction is ${direction}`);
+        direction = (-direction / Math.abs(direction))
+        // console.log(`Slide direction is ${direction}`)
 
-        if(direction != -1 && direction != 1){ //failsafe which isnt needed unless something evil happens
-            throw new error("something evil happened :c pls fix my direction calculation");
+        if (direction != -1 && direction != 1) { //failsafe which isnt needed unless something evil happens
+            throw new error("something evil happened :c pls fix my direction calculation")
         }
 
         let otherTaskIndex = index + direction;
@@ -87,13 +87,13 @@ class List{
         if (!this.listStorage[otherTaskIndex]) { //returns if theres nothing beyond the task
             return;
         }
-        
+
         this.swapIndex(index, otherTaskIndex);
         this.listStorage[index].setPosition(index);
         this.listStorage[otherTaskIndex].setPosition(otherTaskIndex);
     }
 
-        // this will swap the tasks at index and index - 1
+    // this will swap the tasks at index and index - 1
     // moveUp(index){
     //     if(index <= 0 || index >= this.listStorage.length){
     //         return;
@@ -103,9 +103,9 @@ class List{
     //     this.listStorage[index - 1].setPosition(index - 1);
     // }
 
-    setTasksPositions(){
+    setTasksPositions() {
         let storage = this.listStorage;
-        for(let x = 0; x < this.listStorage.length; x++){
+        for (let x = 0; x < this.listStorage.length; x++) {
             storage[x].setPosition(x);
         }
     }
@@ -115,7 +115,7 @@ class List{
      * @param {*} list list to move task to.
      * @param {*} task task to move from this list.
      */
-    moveTask(list, task){
+    moveTask(list, task) {
         list.addTask(task);
         this.removeTask(task);
     }
@@ -134,7 +134,7 @@ class List{
         saveAllLists();
     }
 
-    deleteTaskButtons(){
+    deleteTaskButtons() {
         for (let task of this.getStorage()) {
             task.menu.deleteTaskButtons();
         }
@@ -145,18 +145,18 @@ class List{
         this.deleteListButtons();
         this.deleteTaskButtons();
         localStorage.clear();
-        listArray.splice(listArray.indexOf(this), listArray.indexOf(this)>= 0 ? 1 : 0);
+        listArray.splice(listArray.indexOf(this), listArray.indexOf(this) >= 0 ? 1 : 0);
         hideAllMenus()
         refresh();
         saveAllLists();
     }
 
-    toString(){
+    toString() {
         let output = `List: ${this.name}\n`;
 
-        for(let i = 0; i < this.listStorage.length; i++){
+        for (let i = 0; i < this.listStorage.length; i++) {
             output += this.listStorage[i].toString();
-            if(i <= this.listStorage.length){
+            if (i <= this.listStorage.length) {
                 output += "\n";
             }
         }
@@ -167,21 +167,21 @@ class List{
     toSaveString() {
         let saveString = "";
 
-        let listName = this.getName();
-        console.log(`List being saved: ${listName}`);
-        saveString += listName; //will always be 0 on split (hypothetically)
+        let listName = this.getName()
+        // console.log(`List being saved: ${listName}`)
+        saveString += listName //will always be 0 on split (hypothetically)
 
         for (let task of this.getStorage()) {
-            console.log(`Task being saved: ${task.getName()}`);
-            saveString += "&";
-            saveString += task.toSaveString();
+            // console.log(`Task being saved: ${task.getName()}`)
+            saveString += "&"
+            saveString += task.toSaveString()
         }
 
         return saveString;
     }
 
     //will need worked on a bit when we get multiple lists
-    pushToLocalStorage(listID){
+    pushToLocalStorage(listID) {
         // console.log("pushToLocalStorage is currently broken and has been disabled")
         console.warn("Attempting to save the list...");
         //uploads the obj it to local storage under the key name of what ever is stored in listID
@@ -189,7 +189,7 @@ class List{
         let stringObj = this.toSaveString();
         localStorage.setItem(listID, stringObj);
 
-        console.log("List saved successfully (maybe)!");
+        // console.log("List saved successfully (maybe)!")
     }
 
     loadFromLocalStorage(listId) {
@@ -204,7 +204,7 @@ class List{
         this.listStorage = [];
 
         if (!brokenString[1]) { //early return if there arent any more values (saved list is empty)
-            return
+            return;
         }
         for (let taskNum = 1; taskNum < brokenString.length; taskNum++) {
             let taskSave = brokenString[taskNum];
@@ -247,7 +247,7 @@ class List{
         let verticalOffsetTop = 100;
         let verticalOffsetBottom = 125;
 
-        
+
         rect(x, verticalOffsetTop, 400, windowHeight - verticalOffsetBottom, 15);
 
         //sets pos of buttons
@@ -255,7 +255,7 @@ class List{
         this.deleteListButton.position(x + 290, verticalOffsetTop + 10);
 
         styleButton(this.addTaskButton);
-        styleButton(this.deleteListButton); 
+        styleButton(this.deleteListButton);
 
 
         //shows buttons
@@ -280,7 +280,7 @@ class List{
         }
     }
 
-    showTasks(x){
+    showTasks(x) {
         let verticalOffsetTop = 100;
         let y = 70 + verticalOffsetTop;
         for (let index = 0; index < this.listStorage.length; index++) { 
@@ -289,8 +289,8 @@ class List{
         }
     }
 
-    hideTasksMenus(){
-        for(let task of this.listStorage){
+    hideTasksMenus() {
+        for (let task of this.listStorage) {
             task.menu.closeMenu();
         }
     }

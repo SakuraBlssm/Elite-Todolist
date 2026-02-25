@@ -1,18 +1,20 @@
 //hmm maybe we should use this modularly for some other projects on p5js (virtual pet redux?)
 
-const DEFAULT_RED = 0;
+const DEFAULT_RED   = 0
+const DEFAULT_GREEN = 0
+const DEFAULT_BLUE  = 0
 
 class Color {
     //supports a single argument better c:
     constructor(red, green, blue) {
-        this.R = red   || DEFAULT_RED;
-        this.G = green || this.R;
-        this.B = blue  || this.G;
+        this.R = red   || DEFAULT_RED
+        this.G = green || DEFAULT_GREEN
+        this.B = blue  || DEFAULT_BLUE
     }
 
-    setRed(newRed)     { this.R = newRed   || DEFAULT_RED; }
-    setGreen(newGreen) { this.G = newGreen || this.R; }
-    setBlue(newBlue)   { this.B = newBlue  || this.G; }
+    setRed(newRed)     { this.R = newRed   || DEFAULT_RED }
+    setGreen(newGreen) { this.G = newGreen || DEFAULT_GREEN }
+    setBlue(newBlue)   { this.B = newBlue  || DEFAULT_BLUE }
 
     //instead of passing in numbers for the color() thing pass this in (yes this is tested and works)
     getColor() {
@@ -75,6 +77,24 @@ class Color {
         newColor.changeColor(colorAvg);
 
         return newColor;
+    }
+
+    //just invert but darker, nothing else i can do
+    toDarkMode() {
+        let newColor = this.copy()
+        
+        let colorVals = []
+        
+        for (let colorVal of newColor.getColor()) {
+          // console.log(Math.sqrt(colorVal))
+          let newVal = Math.abs(colorVal - 200)
+          
+          colorVals.push(newVal)
+        }
+
+        newColor.changeColor(colorVals[0], colorVals[1], colorVals[2])
+
+        return newColor
     }
 }
 
