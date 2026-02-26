@@ -1,4 +1,4 @@
-const colorPalettes = { //PLEASE KEEP THIS CLOSED FOR YOUR OWN SANITY
+const colorPalettes = {
     //this one looks bad, do not use it if u value your eyes
     TasteTheRainbow: [
         new Color(255, 173, 173),
