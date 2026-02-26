@@ -1,8 +1,7 @@
 //hmm maybe we should use this modularly for some other projects on p5js (virtual pet redux?)
-
-const DEFAULT_RED   = 0
-const DEFAULT_GREEN = 0
-const DEFAULT_BLUE  = 0
+const DEFAULT_RED        = 0
+const DEFAULT_GREEN      = 0
+const DEFAULT_BLUE       = 0
 
 class Color {
     //supports a single argument better c:
@@ -96,7 +95,14 @@ class Color {
 
         return newColor
     }
+
+    //no clue why anyone would use p5 colors over this but whatever (transparency or something?)
+    toP5Color() {
+        return color(this.R, this.G, this.B)
+    }
 }
+
+
 
 function parseColor(colorString) {
     if (!colorString) {
@@ -106,4 +112,15 @@ function parseColor(colorString) {
     let brokenString = colorString.split(",");
 
     return new Color(brokenString[0], brokenString[1], brokenString[2]);
+}
+
+function importColorPalette(paletteName) {
+    let palette = colorPalettes[paletteName]
+
+    if (!colorPalettes[paletteName]) {
+        console.warn("Color palette doesn't exist!")
+        return
+    }
+
+    return colorPalettes[paletteName]
 }
