@@ -19,18 +19,18 @@ const DESC_SIZE           = 16;
 const STATUS_SIZE         = 16;
 
 //text font
-const TEXT_FONT           = "Courier New"; //TODO: change the font to something thats actually good (this is just one i picked randomly)
+const TEXT_FONT           = COLOR_PALETTE["Font"];
 
 //colors, lots of colors
-const BACKGROUND_COLOR    = COLOR_PALETTE[0]
-const NAME_COLOR          = COLOR_PALETTE[5]
+const BACKGROUND_COLOR    = COLOR_PALETTE["ElementBg"]
+const NAME_COLOR          = COLOR_PALETTE["ElementTextPrimary"]
 const NAME_COLOR_STROKE   = NAME_COLOR.toInverted();
-const DESC_COLOR          = COLOR_PALETTE[6]
+const DESC_COLOR          = COLOR_PALETTE["ElementTextSecondary"]
 const DESC_COLOR_STROKE   = DESC_COLOR.toInverted();
 const DEFAULT_WHITE       = new Color(255);
 
-const TASK_FILL           = COLOR_PALETTE[0];
-const STROKE_COLOR        = COLOR_PALETTE[2];
+const TASK_FILL           = COLOR_PALETTE["ElementBg"];
+const STROKE_COLOR        = COLOR_PALETTE["ElementStroke"];
 const STATUS_COLORS       = {
     Default: new Color(),
     Todo:    new Color(255, 0,   0),

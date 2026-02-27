@@ -113,14 +113,3 @@ function parseColor(colorString) {
 
     return new Color(brokenString[0], brokenString[1], brokenString[2]);
 }
-
-function importColorPalette(paletteName) {
-    let palette = colorPalettes[paletteName]
-
-    if (!colorPalettes[paletteName]) {
-        console.warn("Color palette doesn't exist!")
-        return
-    }
-
-    return colorPalettes[paletteName]
-}

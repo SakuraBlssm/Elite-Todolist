@@ -5,7 +5,8 @@ class Bar{
         this.width = init_width;
         this.height = init_height;
         this.cornerCouverture = init_cornerCouverture;
-        this.color = init_color;
+        this.color = COLOR_PALETTE["ListBg"];
+        this.borderColor = COLOR_PALETTE["ListBorder"]
 
         this.addListButton = createButton(`Add list`);
         this.addListButton.hide();
@@ -30,8 +31,10 @@ class Bar{
 
 
     show(){
-        stroke(0);
-        fill(this.color);
+        strokeWeight(5)
+        stroke(this.borderColor.getColor());
+        
+        fill(this.color.getColor());
         rect(this.x, this.y, this.width, this.height, this.cornerCouverture);
 
         

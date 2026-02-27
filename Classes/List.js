@@ -1,9 +1,9 @@
 const DEFAULT_LIST_NAME = "New List";
 
-const LIST_TITLE_COLOR      = COLOR_PALETTE[0];
-const LIST_BACKGROUND_COLOR = COLOR_PALETTE[6];
+const LIST_TITLE_COLOR      = COLOR_PALETTE["ListTextPrimary"];
+const LIST_BACKGROUND_COLOR = COLOR_PALETTE["ListBg"];
 
-const LIST_BORDER_COLOR     = COLOR_PALETTE[7]
+const LIST_BORDER_COLOR     = COLOR_PALETTE["ListBorder"]
 
 class List {
     constructor(name) {

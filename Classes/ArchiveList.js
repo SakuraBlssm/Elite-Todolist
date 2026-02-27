@@ -6,8 +6,9 @@ class ArchiveList extends List {
 
 
     show(x) {
-        stroke(0);
-        fill(255);
+        strokeWeight(5)
+        stroke(LIST_BORDER_COLOR.getColor());
+        fill(LIST_BACKGROUND_COLOR.getColor());
         // box
         let verticalOffsetTop = 100;
         let verticalOffsetBottom = 125;
@@ -30,7 +31,7 @@ class ArchiveList extends List {
         textFont(TEXT_FONT);
         textAlign(CENTER, CENTER);
         textSize(24);
-        fill(0);
+        fill(LIST_TITLE_COLOR.getColor());
         text(this.name, x + 200, verticalOffsetTop + 20);
         fill(255);
         textSize(12);
