@@ -79,14 +79,18 @@ class Color {
     }
 
     //just invert but darker, nothing else i can do
-    toDarkMode() {
+    toggleDarkMode(darkModeEnabled) {
+        let colorDiff = -200
+        if (darkModeEnabled) {
+            colorDiff *= -1 //reverses if dark mode is enabled
+        }
         let newColor = this.copy()
         
         let colorVals = []
         
         for (let colorVal of newColor.getColor()) {
           // console.log(Math.sqrt(colorVal))
-          let newVal = Math.abs(colorVal - 200)
+          let newVal = Math.abs(colorVal + colorDiff)
           
           colorVals.push(newVal)
         }
