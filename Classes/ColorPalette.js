@@ -17,7 +17,7 @@ class ColorPalette {
     toggleDarkMode(darkModeEnabled) {
         for (let colorName in this) {
             let colorVal = this[colorName]
-            let evilColor = colorVal.toggleDarkMode(darkModeEnabled)
+            let evilColor = colorVal.toDarkMode(darkModeEnabled)
 
             this[colorName] = evilColor
         }
