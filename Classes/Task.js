@@ -75,8 +75,8 @@ class Task {
             0, 
             100, 
             105,
-            this.bgColor.toP5Color(), 
-            STROKE_COLOR.toP5Color(), 
+            this.bgColor, 
+            STROKE_COLOR, 
             this
         );
     }
