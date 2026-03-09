@@ -13,9 +13,9 @@ class List {
         this.deleteListButton.hide();
         this.deleteListButton.mousePressed(() => this.buttonPressedDeleteList());
 
-        this.titleColor = theme.getColor("ListTextPrimary")
-        this.backgroundColor = theme.getColor("ListBg")
-        this.borderColor = theme.getColor("ListBorder")
+        this.titleColor = theme.getColor("TextPrimary")
+        this.backgroundColor = theme.getColor("BackgroundSecondary")
+        this.borderColor = theme.getColor("StrokePrimary")
     }
 
     //Getters
@@ -213,12 +213,16 @@ class List {
     }
 
     show(x) {
+        let borderColor = theme.getColor("StrokePrimary")
+        let backgroundColor = theme.getColor("BackgroundSecondary")
+        let titleColor = theme.getColor("TextPrimary")
+
         if (mode === "default") {
-            stroke(this.borderColor.getColor());
-            fill(this.backgroundColor.getColor());
+            stroke(borderColor.getColor());
+            fill(backgroundColor.getColor());
         } else if (mode === "dark") {
-            let evilmodeColor = this.backgroundColor.toDarkMode()
-            let evilBorderColor = this.borderColor.toDarkMode()
+            let evilmodeColor = backgroundColor.toDarkMode()
+            let evilBorderColor = borderColor.toDarkMode()
             stroke(evilBorderColor.getColor());
             fill(evilmodeColor.getColor());
         }
@@ -242,13 +246,13 @@ class List {
 
         // title
         strokeWeight(0)
-        textFont(TEXT_FONT);
+        textFont(theme.getFont());
         textAlign(CENTER, CENTER);
         if (mode === "default") {
             strokeWeight(0);
-            fill(this.titleColor.getColor());
+            fill(titleColor.getColor());
         } else if (mode === "dark") {
-            let evilTitleColor = this.titleColor.toDarkMode()
+            let evilTitleColor = titleColor.toDarkMode()
             strokeWeight(3);
             fill(evilTitleColor.getColor());
         }

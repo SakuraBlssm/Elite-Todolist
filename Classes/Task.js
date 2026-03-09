@@ -18,24 +18,15 @@ const NAME_SIZE           = 25;
 const DESC_SIZE           = 16;
 const STATUS_SIZE         = 16;
 
-//text font
-const TEXT_FONT           = theme.getFont();
-
 //colors, lots of colors
 //const BACKGROUND_COLOR    = 
-const NAME_COLOR          = theme.getColor("ElementTextPrimary")
-const NAME_COLOR_STROKE   = NAME_COLOR.toInverted();
-const DESC_COLOR          = theme.getColor("ElementTextSecondary")
-const DESC_COLOR_STROKE   = DESC_COLOR.toInverted();
-const DEFAULT_WHITE       = new Color(255);
+const DEFAULT_WHITE       = new Paint(255);
 
-const TASK_FILL           = theme.getColor("ElementBg");
-const STROKE_COLOR        = theme.getColor("ElementStroke");
 const STATUS_COLORS       = {
-    Default: new Color(),
-    Todo:    new Color(255, 0,   0),
-    Doing:   new Color(255, 255, 0),
-    Done:    new Color(0,   255, 0),
+    Default: new Paint(),
+    Todo:    new Paint(255, 0,   0),
+    Doing:   new Paint(255, 255, 0),
+    Done:    new Paint(0,   255, 0),
 };
 
 //confirm button settings (offsets so far)
@@ -64,12 +55,7 @@ class Task {
         this.position    = position || DEFAULT_POSITION;
         this.finished    =             DEFAULT_FINISHED;  
         this.id          = id       || Math.floor(Date.now() / ((Math.random() * 10000) + 500));
-        this.bgColor     = theme.getColor("ElementBg");
         // this.id          = id       || GenerateId();  
-
-        this.nameColor = theme.getColor("ElementTextPrimary")
-        this.nameColorStroke = this.nameColor.toInverted()
-        this.descColor = 
 
         //let menuBg = this.bgColor.getColor()
         //let menuStroke = STROKE_COLOR.getColor()
@@ -79,8 +65,6 @@ class Task {
             0, 
             100, 
             105,
-            this.bgColor, 
-            STROKE_COLOR, 
             this
         );
     }
@@ -139,12 +123,17 @@ class Task {
         saveString += this.getStatus() + "|";
         saveString += this.getPosition() + "|";
         saveString += this.getId() + "|";
-        saveString += this.bgColor.toSaveString() + "";
+        // saveString += this.bgColor.toSaveString() + "";
 
         return saveString;
     }
   
     show(x, y) {
+        let strokeColor = theme.getColor("StrokeSecondary")
+        let nameColor = theme.getColor("TextSecondary")
+        let descColor = theme.getColor("TextTertiary")
+        let bgColor = theme.getColor("BackgroundTertiary")
+
         let menu = this.menu
 
         this.x = x; // why is show (an accessor method) changing instance variables like a setter method?????
@@ -155,12 +144,12 @@ class Task {
 
         // main box
         strokeWeight(3);
-        stroke(STROKE_COLOR.getColor());
+        stroke(strokeColor.getColor());
         push();
         if (mode === "default") {
-            fill(this.bgColor.getColor());
+            fill(bgColor.getColor());
         } else if (mode === "dark") {
-            fill(this.bgColor.toDarkMode().getColor());
+            fill(bgColor.toDarkMode().getColor());
         }
         rect(x, y, 380, 120, 10);
         pop();
@@ -173,17 +162,15 @@ class Task {
 
         strokeWeight(0); //i really do not like using stroke on text, it looks SOOO ugly
         // text slop
-        textFont(TEXT_FONT);
+        textFont(theme.getFont());
         //name
         textAlign(CENTER, CENTER);
-        fill(NAME_COLOR.getColor());
-        stroke(NAME_COLOR_STROKE.getColor());
+        fill(nameColor.getColor());
         textSize(NAME_SIZE);
         text(this.name, x + TEXT_X_OFFSET, y + TEXT_Y_PADDING);
 
         //desc
-        fill(DESC_COLOR.getColor());
-        stroke(DESC_COLOR_STROKE.getColor());
+        fill(descColor.getColor());
         textSize(DESC_SIZE);
         text(this.description, x + TEXT_X_OFFSET, y + TEXT_Y_PADDING * 2);
 

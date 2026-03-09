@@ -3,7 +3,7 @@ const DEFAULT_RED        = 0
 const DEFAULT_GREEN      = 0
 const DEFAULT_BLUE       = 0
 
-class Color {
+class Paint {
     //supports a single argument better c:
     constructor(red, green, blue) {
         this.R = red   || DEFAULT_RED
@@ -52,7 +52,7 @@ class Color {
     }
     
     copy() {
-        return new Color(this.R, this.G, this.B);
+        return new Paint(this.R, this.G, this.B);
     }
 
     //you cant get THIS from a NUMBER!
@@ -91,7 +91,7 @@ class Color {
           colorVals.push(newVal)
         }
 
-        return new Color(colorVals[0], colorVals[1], colorVals[2])
+        return new Paint(colorVals[0], colorVals[1], colorVals[2])
     }
 
     //no clue why anyone would use p5 colors over this but whatever (transparency or something?)
@@ -109,5 +109,5 @@ function parseColor(colorString) {
 
     let brokenString = colorString.split(",");
 
-    return new Color(brokenString[0], brokenString[1], brokenString[2]);
+    return new Paint(brokenString[0], brokenString[1], brokenString[2]);
 }

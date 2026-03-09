@@ -3,15 +3,12 @@ const MENU_X_OFFSET = 370;
 const MENU_Y_OFFSET = 6;
 
 class Menu {
-
-    constructor(x, y, width, height, bgColor, borderColor, task) {
+    constructor(x, y, width, height, task) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
-        this.bgColor = bgColor.copy();
-        this.borderColor = borderColor.copy();
-        this.task = task;
+        this.parent = task;
 
         this.markTaskDoneButton = createButton(`Mark Done`);
         this.markTaskDoneButton.hide();
@@ -46,16 +43,16 @@ class Menu {
     }
 
     buttonPressedMarkDone() {
-        this.task.setCompleted();
+        this.parent.setCompleted();
         let list = this.getListTask();
         for (let i = 0; i < listArray.length; i++) {
             if (listArray[i].getName() === "Archive") {
-                list.moveTask(listArray[i], this.task);
+                list.moveTask(listArray[i], this.parent);
                 break;
             }
             if (i === listArray.length - 1) {
                 listArray.push(new ArchiveList("Archive"));
-                list.moveTask(listArray[i + 1], this.task);
+                list.moveTask(listArray[i + 1], this.parent);
                 break;
             }
         }
@@ -69,7 +66,7 @@ class Menu {
     buttonPressedDelete() {
         let list = this.getListTask();
         this.deleteTaskButtons();
-        list.removeTask(this.task);
+        list.removeTask(this.parent);
         list.setTasksPositions();
         this.deleteMenu();
         hideAllMenus();
@@ -78,16 +75,16 @@ class Menu {
     }
 
     closeMenu() {
-        this.taskMenuOpen = false;
+        this.parentMenuOpen = false;
         this.hideMenuButtons();
     }
 
     buttonPressedMenu() {
-        if (!this.taskMenuOpen) {
+        if (!this.parentMenuOpen) {
             hideAllMenus()
-            this.taskMenuOpen = true;
+            this.parentMenuOpen = true;
             return;
-        } else if (this.taskMenuOpen) {
+        } else if (this.parentMenuOpen) {
             this.closeMenu();
         }
 
@@ -103,10 +100,11 @@ class Menu {
     }
 
     show() {
-
-        if (!this.taskMenuOpen) {
+        if (!this.parentMenuOpen) {
             return;
         }
+        let bgColor = theme.getColor("BackgroundTertiary")
+        let borderColor = theme.getColor("StrokeSecondary")
 
         const pos = { x: this.x, y: this.y };
 
@@ -116,11 +114,11 @@ class Menu {
         this.mainBox.style(`height: ${[this.height]}px`);
         this.mainBox.style("z-index: 2");
         if (mode === "default") {
-            this.mainBox.style(`background-color: ${[color(this.bgColor.getColor()[0], this.bgColor.getColor()[1], this.bgColor.getColor()[2])]}`);
-            this.mainBox.style(`border: 3px solid ${[color(this.borderColor.getColor()[0], this.borderColor.getColor()[1], this.borderColor.getColor()[2])]}`);
+            this.mainBox.style(`background-color: ${[color(bgColor.getColor()[0], bgColor.getColor()[1], bgColor.getColor()[2])]}`);
+            this.mainBox.style(`border: 3px solid ${[color(borderColor.getColor()[0], borderColor.getColor()[1], borderColor.getColor()[2])]}`);
         } else if (mode === "dark") {
-            this.mainBox.style(`background-color: ${[color(this.bgColor.toDarkMode().getColor()[0], this.bgColor.toDarkMode().getColor()[1], this.bgColor.toDarkMode().getColor()[2])]}`);
-            this.mainBox.style(`border: 3px solid ${[color(this.borderColor.getColor()[0], this.borderColor.getColor()[1], this.borderColor.getColor()[2])]}`);
+            this.mainBox.style(`background-color: ${[color(bgColor.toDarkMode().getColor()[0], bgColor.toDarkMode().getColor()[1], bgColor.toDarkMode().getColor()[2])]}`);
+            this.mainBox.style(`border: 3px solid ${[color(borderColor.getColor()[0], borderColor.getColor()[1], borderColor.getColor()[2])]}`);
         }
 
         this.mainBox.style(`border-radius: 10px`);
@@ -165,18 +163,18 @@ class Menu {
     }
 
     editTask() {
-        let editName = prompt("Input new task name:", this.task.name);
+        let editName = prompt("Input new task name:", this.parent.name);
         switch (editName) {
             case null:
                 return;
                 break;
 
             default:
-                this.task.name = editName;
+                this.parent.name = editName;
                 saveAllLists();
         }
 
-        let editDesc = prompt("Input new task description:", this.task.description);
+        let editDesc = prompt("Input new task description:", this.parent.description);
         switch (editDesc) {
             case null:
                 saveAllLists();
@@ -184,7 +182,7 @@ class Menu {
                 break;
 
             default:
-                this.task.description = editDesc;
+                this.parent.description = editDesc;
                 saveAllLists();
         }
 
@@ -194,7 +192,7 @@ class Menu {
     slidePosition(direction) {
         let list = this.getListTask();
         // console.log(list);
-        let taskIndex = this.task.position
+        let taskIndex = this.parent.position
 
         if (direction == 0) { //avoids dividing by zero and other stuff that will break the app
             return;
@@ -215,7 +213,7 @@ class Menu {
     getListTask() {
         for (let list of listArray) {
             let storage = list.getStorage();
-            if (storage.findIndex(t => t.id === this.task.id) != -1) {
+            if (storage.findIndex(task => task.id === this.parent.id) != -1) {
                 return list;
             }
         }
