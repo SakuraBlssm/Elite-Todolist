@@ -1,10 +1,5 @@
 const DEFAULT_LIST_NAME = "New List";
 
-const LIST_TITLE_COLOR      = COLOR_PALETTE["ListTextPrimary"];
-const LIST_BACKGROUND_COLOR = COLOR_PALETTE["ListBg"];
-
-const LIST_BORDER_COLOR     = COLOR_PALETTE["ListBorder"]
-
 class List {
     constructor(name) {
         this.name = name || DEFAULT_LIST_NAME;
@@ -19,6 +14,9 @@ class List {
             color(0,0,0), 
             this
         );
+        this.titleColor = theme.getColor("TextPrimary")
+        this.backgroundColor = theme.getColor("BackgroundSecondary")
+        this.borderColor = theme.getColor("StrokePrimary")
     }
 
     //Getters
@@ -185,27 +183,36 @@ class List {
     }
 
     show(x) {
+        let ctx = drawingContext
+        ctx.shadowColor = theme.getColor("Glow").toHex();
+        ctx.shadowOffsetX = 0.7;
+        ctx.shadowOffsetY = 0.7;
+        ctx.shadowBlur = 1;
 
-        this.x = x;
+        let borderColor = theme.getColor("StrokePrimary")
+        let backgroundColor = theme.getColor("BackgroundSecondary")
+        let titleColor = theme.getColor("TextPrimary")
 
-        stroke(0);
-        fill(255);
-        
-        if (theme === "default") {
-            stroke(LIST_BORDER_COLOR.getColor())
-            fill(LIST_BACKGROUND_COLOR.getColor());
-        } else if (theme === "dark") {
-            stroke(LIST_BORDER_COLOR.toDarkMode().getColor())
-            fill(LIST_BACKGROUND_COLOR.toDarkMode().getColor());
+        if (mode === "default") {
+            stroke(borderColor.getColor());
+            fill(backgroundColor.getColor());
+        } else if (mode === "dark") {
+            let evilmodeColor = backgroundColor.toDarkMode()
+            let evilBorderColor = borderColor.toDarkMode()
+            stroke(evilBorderColor.getColor());
+            fill(evilmodeColor.getColor());
         }
         // box
         strokeWeight(5);
         let verticalOffsetTop = 100;
         let verticalOffsetBottom = 125;
-
+        
         rect(x, verticalOffsetTop, 400, windowHeight - verticalOffsetBottom, 15);
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 0;
+        ctx.shadowBlur = 0;
 
-        // sets pos of buttons        
+        //sets pos of buttons
         this.menu.menuButton.position(x + 370,verticalOffsetBottom - 17);
 
         //show move task up/down buttons
@@ -213,19 +220,20 @@ class List {
 
         // title
         strokeWeight(0)
-        textFont(TEXT_FONT);
+        textFont(theme.getFont());
         textAlign(CENTER, CENTER);
-        if (theme === "default") {
+        if (mode === "default") {
             strokeWeight(0);
-            fill(LIST_TITLE_COLOR.getColor());
-        } else if (theme === "dark") {
+            fill(titleColor.getColor());
+        } else if (mode === "dark") {
+            let evilTitleColor = titleColor.toDarkMode()
             strokeWeight(3);
-            fill(LIST_TITLE_COLOR.toDarkMode().getColor());
+            fill(evilTitleColor.getColor());
         }
         textSize(24);
         
         text(this.name, x + 200, verticalOffsetTop + 20);
-        // fill(LIST_BACKGROUND_COLOR.getColor());
+        // fill(this.backgroundColor.getColor());
         textSize(12);
         strokeWeight(1);
 

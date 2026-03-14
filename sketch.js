@@ -2,10 +2,8 @@ let listArray   = [];
 const X_START   = 10;
 const X_PADDING = 410;
 
-let bgColor = COLOR_PALETTE["Background"].getColor()
-
 let menuBar;
-let theme = "default";
+let mode = "default";
 // sorry i couldnt think of a better solution for spacing them out
 // well actually i probably could but minimum viable product yknow
 
@@ -27,29 +25,19 @@ function setup() {
     }
     i++;
   }
-
-
-  // let list0 = new List("Groceries");
-  // list0.addTask(new Task("Apples", "Get 2 Honeycrisp apples"));
-  // list0.addTask(new Task("Bananas", "3 or 4 green bananas"));
-  // listArray.push(list0);  
-
-  // let list1 = new List("Movies To Watch");
-  // list1.addTask(new Task("Marty Supreme", "About table tennis?"));
-  // list1.addTask(new Task("The Muppet Show", "Seth Rogan is in it"));
-  // list1.addTask(new Task("F1", "Cars go vroom"));
-  // listArray.push(list1);  
-
-
-  //initList();
+  let savedTheme = localStorage.getItem("Theme")
+  if (savedTheme) {
+    theme = getPresetTheme(savedTheme)
+  }
 }
 
 function draw() {
-  
-  if (theme === "default") {
-    background(bgColor);
-  } else if (theme === "dark") {
-    background(0);
+  let bgColor = theme.getColor("BackgroundPrimary")
+  if (mode === "default") {
+    background(bgColor.getColor());
+  } else if (mode === "dark") {
+    let evilBg = bgColor.toDarkMode()
+    background(evilBg);
   }
   showLists();
   menuBar.show();
@@ -113,14 +101,13 @@ function getNewList(){
 }
 
 function styleButton(btn) {
-  if (theme === "default") {
-    btn.style("background-color", "#ffffff"); 
-    btn.style("color", "#000000"); 
-  } else if (theme === "dark") {
-    btn.style("background-color", "#000000"); 
-    btn.style("color", "#ffffff"); 
-  }      
-  btn.style("border", "2px solid #64e6ff"); 
+  let bgClr = theme.getColor("BackgroundTertiary")
+  let textClr = theme.getColor("TextSecondary")
+  let strokeClr = theme.getColor("StrokeSecondary")
+
+  btn.style("background-color", bgClr.toHex()); 
+  btn.style("color", textClr.toHex()); 
+  btn.style("border", "2px solid" + strokeClr.toHex()); 
   btn.style("padding", "8px 16px");
   btn.style("border-radius", "6px");
   btn.style("font-size", "14px");

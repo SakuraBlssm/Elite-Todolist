@@ -18,24 +18,12 @@ const NAME_SIZE           = 25;
 const DESC_SIZE           = 16;
 const STATUS_SIZE         = 16;
 
-//text font
-const TEXT_FONT           = COLOR_PALETTE["Font"];
-
 //colors, lots of colors
-const BACKGROUND_COLOR    = COLOR_PALETTE["ElementBg"]
-const NAME_COLOR          = COLOR_PALETTE["ElementTextPrimary"]
-const NAME_COLOR_STROKE   = NAME_COLOR.toInverted();
-const DESC_COLOR          = COLOR_PALETTE["ElementTextSecondary"]
-const DESC_COLOR_STROKE   = DESC_COLOR.toInverted();
-const DEFAULT_WHITE       = new Color(255);
-
-const TASK_FILL           = COLOR_PALETTE["ElementBg"];
-const STROKE_COLOR        = COLOR_PALETTE["ElementStroke"];
 const STATUS_COLORS       = {
-    Default: new Color(),
-    Todo:    new Color(255, 0,   0),
-    Doing:   new Color(255, 255, 0),
-    Done:    new Color(0,   255, 0),
+    Default: new Paint(),
+    Todo:    new Paint(255, 0,   0),
+    Doing:   new Paint(255, 255, 0),
+    Done:    new Paint(0,   255, 0),
 };
 
 //confirm button settings (offsets so far)
@@ -64,7 +52,6 @@ class Task {
         this.position    = position || DEFAULT_POSITION;
         this.finished    =             DEFAULT_FINISHED;  
         this.id          = id       || Math.floor(Date.now() / ((Math.random() * 10000) + 500));
-        this.bgColor     = BACKGROUND_COLOR;
         // this.id          = id       || GenerateId();  
 
         //let menuBg = this.bgColor.getColor()
@@ -113,7 +100,6 @@ class Task {
         this.setStatus(TASK_STATES.DELETED);
     }
     
-
     //methods
     toString() {
         let output = "";
@@ -135,12 +121,23 @@ class Task {
         saveString += this.getStatus() + "|";
         saveString += this.getPosition() + "|";
         saveString += this.getId() + "|";
-        saveString += this.bgColor.toSaveString() + "";
+        // saveString += this.bgColor.toSaveString() + "";
 
         return saveString;
     }
   
     show(x, y) {
+        let ctx = drawingContext
+        ctx.shadowColor = theme.getColor("Glow").toHex();
+        ctx.shadowOffsetX = 0.7;
+        ctx.shadowOffsetY = 0.7;
+        ctx.shadowBlur = 1;
+
+        let strokeColor = theme.getColor("StrokeSecondary")
+        let nameColor = theme.getColor("TextSecondary")
+        let descColor = theme.getColor("TextTertiary")
+        let bgColor = theme.getColor("BackgroundTertiary")
+
         let menu = this.menu
 
         this.x = x; // why is show (an accessor method) changing instance variables like a setter method?????
@@ -151,35 +148,59 @@ class Task {
 
         // main box
         strokeWeight(3);
-        stroke(STROKE_COLOR.getColor());
+        stroke(strokeColor.getColor());
         push();
-        if (theme === "default") {
-            fill(this.bgColor.getColor());
-        } else if (theme === "dark") {
-            fill(this.bgColor.toDarkMode().getColor());
+        if (mode === "default") {
+            fill(bgColor.getColor());
+        } else if (mode === "dark") {
+            fill(bgColor.toDarkMode().getColor());
         }
-        rect(x, y, 380, 120, 10);
+        rect(x, y, 380, 120, 10); // why aren't these constants?!
         pop();
+
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 0;
+        ctx.shadowBlur = 0;
 
         // sets pos of buttons        
         menu.menuButton.position(x + 345, y + 7);
 
+        //styles the menu button
+        let buttonBg = theme.getColor("BackgroundSecondary")
+        let buttonText = theme.getColor("TextPrimary")
+        let buttonStroke = theme.getColor("StrokePrimary")
+
+        menu.menuButton.style("background-color", buttonBg.toHex()); 
+        menu.menuButton.style("color", buttonText.toHex()); 
+        menu.menuButton.style("border", "2px solid" + buttonStroke.toHex()); 
+
         //show move task up/down buttons
         menu.menuButton.show();
 
+        // text highlight
+        let highlightOpacity = 22; // scale of 0-100
+        textSize(NAME_SIZE);
+        let highlightMargin = 5;
+        let highlightWidth = 380 - highlightMargin * 2;
+        let highlightHeight = 120 * 0.38 - highlightMargin;
+        //let highlightWidth = textWidth(this.name) + highlightMargin;
+        //let highlightHeight = textAscent(this.name) * 0.2 + highlightMargin;
+        noStroke()
+        fill(255,255,255,highlightOpacity);
+        rect(x + highlightMargin, y + highlightMargin, highlightWidth, highlightHeight, 10)
+
+        
         strokeWeight(0); //i really do not like using stroke on text, it looks SOOO ugly
         // text slop
-        textFont(TEXT_FONT);
+        textFont(theme.getFont());
         //name
         textAlign(CENTER, CENTER);
-        fill(NAME_COLOR.getColor());
-        stroke(NAME_COLOR_STROKE.getColor());
+        fill(nameColor.getColor());
         textSize(NAME_SIZE);
         text(this.name, x + TEXT_X_OFFSET, y + TEXT_Y_PADDING);
 
         //desc
-        fill(DESC_COLOR.getColor());
-        stroke(DESC_COLOR_STROKE.getColor());
+        fill(descColor.getColor());
         textSize(DESC_SIZE);
         text(this.description, x + TEXT_X_OFFSET, y + TEXT_Y_PADDING * 2);
 

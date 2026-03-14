@@ -64,14 +64,17 @@ class Menu {
 
     buttonPressedMarkDone() {
         this.parent.setCompleted();
+        this.parent.setCompleted();
         let list = this.getListTask();
         for (let i = 0; i < listArray.length; i++) {
             if (listArray[i].getName() === "Archive") {
+                list.moveTask(listArray[i], this.parent);
                 list.moveTask(listArray[i], this.parent);
                 break;
             }
             if (i === listArray.length - 1) {
                 listArray.push(new ArchiveList("Archive"));
+                list.moveTask(listArray[i + 1], this.parent);
                 list.moveTask(listArray[i + 1], this.parent);
                 break;
             }
@@ -131,8 +134,13 @@ class Menu {
     }
 
     buttonPressedDelete() {
+        if (!confirm(`Delete ${this.parent.getName()}?`)) {
+            return
+        }
+
         let list = this.getListTask();
         this.deleteTaskButtons();
+        list.removeTask(this.parent);
         list.removeTask(this.parent);
         list.setTasksPositions();
         this.deleteMenu();
@@ -188,10 +196,11 @@ class Menu {
 
     showTaskMenu() {
 
-         if (!this.taskMenuOpen) {
-             return;
-         }
-
+        if (!this.taskMenuOpen) {
+            return;
+        }
+        let bgColor = theme.getColor("BackgroundTertiary")
+        let borderColor = theme.getColor("StrokeSecondary")
         const pos = { x: this.x, y: this.y };
 
         // main box
@@ -199,12 +208,12 @@ class Menu {
         this.mainBox.style(`width: ${[this.width]}px`);
         this.mainBox.style(`height: ${[this.height]}px`);
         this.mainBox.style("z-index: 2");
-        if (theme === "default") {
-            this.mainBox.style(`background-color: ${[color(this.bgColor.getColor()[0], this.bgColor.getColor()[1], this.bgColor.getColor()[2])]}`);
-            this.mainBox.style(`border: 3px solid ${[color(this.borderColor.getColor()[0], this.borderColor.getColor()[1], this.borderColor.getColor()[2])]}`);
-        } else if (theme === "dark") {
-            this.mainBox.style(`background-color: ${[color(this.bgColor.toDarkMode().getColor()[0], this.bgColor.toDarkMode().getColor()[1], this.bgColor.toDarkMode().getColor()[2])]}`);
-            this.mainBox.style(`border: 3px solid ${[color(this.borderColor.getColor()[0], this.borderColor.getColor()[1], this.borderColor.getColor()[2])]}`);
+        if (mode === "default") {
+            this.mainBox.style(`background-color: ${bgColor.toHex()}`);
+            this.mainBox.style(`border: 3px solid ${borderColor.toHex()}`);
+        } else if (mode === "dark") {
+            this.mainBox.style(`background-color: ${bgColor.toDarkMode().toHex()}`);
+            this.mainBox.style(`border: 3px solid ${borderColor.toHex()}`);
         }
 
         this.mainBox.style(`border-radius: 10px`);
@@ -217,26 +226,25 @@ class Menu {
         this.moveTaskUpButton.position(pos.x + MENU_X_OFFSET + 7, pos.y + MENU_Y_OFFSET + 76);
         this.moveTaskDownButton.position(pos.x + MENU_X_OFFSET + 41, pos.y + MENU_Y_OFFSET + 76);
 
-        //show move task up/down buttons
-        this.markTaskDoneButton.show();
-        this.editTaskButton.show();
-        this.deleteTaskButton.show();
-        this.moveTaskUpButton.show();
-        this.moveTaskDownButton.show();
-
-        //menu buttons style.
-        this.markTaskDoneButton.style('z-index', '3');
-        this.editTaskButton.style('z-index', '3');
-        this.deleteTaskButton.style('z-index', '3');
-        this.moveTaskUpButton.style('z-index', '3');
-        this.moveTaskDownButton.style('z-index', '3');
-
-        //menu buttons position style.
-        this.markTaskDoneButton.style('position', 'absolute');
-        this.editTaskButton.style('position', 'absolute');
-        this.deleteTaskButton.style('position', 'absolute');
-        this.moveTaskUpButton.style('position', 'absolute');
-        this.moveTaskDownButton.style('position', 'absolute');
+        let buttons = [
+            this.markTaskDoneButton,
+            this.editTaskButton,
+            this.deleteTaskButton,
+            this.moveTaskUpButton,
+            this.moveTaskDownButton
+        ]
+        
+        let bgClr = theme.getColor("BackgroundSecondary")
+        let textClr = theme.getColor("TextPrimary")
+        let strokeClr = theme.getColor("StrokePrimary")
+        for (let btn of buttons) {
+            btn.show()
+            btn.style('z-index', '3')
+            btn.style('position', 'absolute')
+            btn.style("background-color", bgClr.toHex()); 
+            btn.style("color", textClr.toHex()); 
+            btn.style("border", "2px solid" + strokeClr.toHex()); 
+        }
     }
 
     showListMenu() {
@@ -276,10 +284,28 @@ class Menu {
         this.addTaskButton.style('position', 'absolute');
         this.deleteListButton.style('position', 'absolute');
         this.editListButton.style('position', 'absolute');
-
+        let buttons = [
+            this.markTaskDoneButton,
+            this.editTaskButton,
+            this.deleteTaskButton,
+            this.moveTaskUpButton,
+            this.moveTaskDownButton
+        ]
+        
+        let bgClr = theme.getColor("BackgroundSecondary")
+        let textClr = theme.getColor("TextPrimary")
+        let strokeClr = theme.getColor("StrokePrimary")
+        for (let btn of buttons) {
+            btn.show()
+            btn.style('z-index', '3')
+            btn.style('position', 'absolute')
+            btn.style("background-color", bgClr.toHex()); 
+            btn.style("color", textClr.toHex()); 
+            btn.style("border", "2px solid" + strokeClr.toHex()); 
+        }
     }
 
-    hideTaskMenuButtons() {
+    hideMenuButtons() {
         this.markTaskDoneButton.hide();
         this.deleteTaskButton.hide();
         this.editTaskButton.hide();
@@ -321,12 +347,16 @@ class Menu {
                 saveAllLists();
         }
 
+        this.parent.description = editDesc;
+        saveAllLists();
+        
         hideAllMenus();
     }
 
     slidePosition(direction) {
         let list = this.getListTask();
         // console.log(list);
+        let taskIndex = this.parent.position
         let taskIndex = this.parent.position
 
         if (direction == 0) { //avoids dividing by zero and other stuff that will break the app
@@ -348,7 +378,7 @@ class Menu {
     getListTask() {
         for (let list of listArray) {
             let storage = list.getStorage();
-            if (storage.findIndex(t => t.id === this.parent.id) != -1) {
+            if (storage.findIndex(task => task.id === this.parent.id) != -1) {
                 return list;
             }
         }

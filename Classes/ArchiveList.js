@@ -8,21 +8,35 @@ class ArchiveList extends List {
 
 
     show(x) {
+        let ctx = drawingContext
+        ctx.shadowColor = theme.getColor("Glow").toHex();
+        ctx.shadowOffsetX = 0.7;
+        ctx.shadowOffsetY = 0.7;
+        ctx.shadowBlur = 1;
+
         strokeWeight(5)
-        
-        if (theme === "default") {
-            stroke(LIST_BORDER_COLOR.getColor());
-            fill(LIST_BACKGROUND_COLOR.getColor());
-        } else if (theme === "dark") {
-            stroke(LIST_BORDER_COLOR.toDarkMode().getColor());
-            fill(LIST_BACKGROUND_COLOR.toDarkMode().getColor());
+
+        let borderColor = theme.getColor("StrokePrimary")
+        let backgroundColor = theme.getColor("BackgroundSecondary")
+        let titleColor = theme.getColor("TextPrimary")
+
+        if (mode === "default") {
+            stroke(borderColor.getColor());
+            fill(backgroundColor.getColor());
+        } else if (mode === "dark") {
+            let evilmodeColor = backgroundColor.toDarkMode()
+            let evilBorderColor = borderColor.toDarkMode()
+            stroke(evilBorderColor.getColor());
+            fill(evilmodeColor.getColor());
         }
         // box
         let verticalOffsetTop = 100;
         let verticalOffsetBottom = 125;
 
-        
         rect(x, verticalOffsetTop, 400, windowHeight - verticalOffsetBottom, 15);
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 0;
+        ctx.shadowBlur = 0;
 
         //sets pos of buttons
         this.deleteListButton.position(x + 290, verticalOffsetTop + 10);
@@ -35,17 +49,18 @@ class ArchiveList extends List {
 
         // title
         
-        textFont(TEXT_FONT);
+        textFont(theme.getFont());
         textAlign(CENTER, CENTER);
       
        
         
-        if (theme === "default") {
+        if (mode === "default") {
             strokeWeight(0);
-            fill(LIST_TITLE_COLOR.getColor());
-        } else if (theme === "dark") {
+            fill(titleColor.getColor());
+        } else if (mode === "dark") {
+            let evilTitleColor = titleColor.toDarkMode()
             strokeWeight(3);
-            fill(LIST_TITLE_COLOR.toDarkMode().getColor());
+            fill(evilTitleColor.getColor());
         }
         textSize(24);
       

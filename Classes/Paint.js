@@ -3,7 +3,16 @@ const DEFAULT_RED        = 0
 const DEFAULT_GREEN      = 0
 const DEFAULT_BLUE       = 0
 
-class Color {
+const HEX_VALUES = [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F"
+]
+
+class Paint {
     //supports a single argument better c:
     constructor(red, green, blue) {
         this.R = red   || DEFAULT_RED
@@ -52,7 +61,7 @@ class Color {
     }
     
     copy() {
-        return new Color(this.R, this.G, this.B);
+        return new Paint(this.R, this.G, this.B);
     }
 
     //you cant get THIS from a NUMBER!
@@ -73,7 +82,7 @@ class Color {
         let newColor = this.copy();
 
         let colorAvg = Math.round((newColor.R + newColor.G + newColor.B) / 3);
-        newColor.changeColor(colorAvg);
+        newColor.changeColor(colorAvg, colorAvg, colorAvg);
 
         return newColor;
     }
@@ -91,7 +100,29 @@ class Color {
           colorVals.push(newVal)
         }
 
-        return new Color(colorVals[0], colorVals[1], colorVals[2])
+        return new Paint(colorVals[0], colorVals[1], colorVals[2])
+    }
+
+    //just in case...
+    toHex() {
+        let hexString = "#" //remove # if its not needed
+
+        for (let rgb of this.getColor()) { //gets all 3 values
+            let val1 = Math.floor(rgb / 16)
+            let val2 = rgb % 16
+
+            if (val1 > 9) {
+                val1 = HEX_VALUES[val1 - 10]
+            }
+            if (val2 > 9) {
+                val2 = HEX_VALUES[val2 - 10]
+            }
+
+            hexString += val1 + ""
+            hexString += val2 + ""
+        }
+        
+        return hexString
     }
 
     //no clue why anyone would use p5 colors over this but whatever (transparency or something?)
@@ -109,5 +140,5 @@ function parseColor(colorString) {
 
     let brokenString = colorString.split(",");
 
-    return new Color(brokenString[0], brokenString[1], brokenString[2]);
+    return new Paint(brokenString[0], brokenString[1], brokenString[2]);
 }
