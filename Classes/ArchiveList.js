@@ -8,7 +8,9 @@ class ArchiveList extends List {
     show(x) {
         let ctx = drawingContext
         ctx.shadowColor = theme.getColor("Glow").toHex();
-        ctx.shadowBlur = 10;
+        ctx.shadowOffsetX = 0.7;
+        ctx.shadowOffsetY = 0.7;
+        ctx.shadowBlur = 1;
 
         strokeWeight(5)
 
@@ -30,7 +32,9 @@ class ArchiveList extends List {
         let verticalOffsetBottom = 125;
 
         rect(x, verticalOffsetTop, 400, windowHeight - verticalOffsetBottom, 15);
-        ctx.shadowBlur = 0
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 0;
+        ctx.shadowBlur = 0;
 
         //sets pos of buttons
         this.deleteListButton.position(x + 290, verticalOffsetTop + 10);

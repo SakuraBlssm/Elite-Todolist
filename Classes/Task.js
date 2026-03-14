@@ -127,7 +127,9 @@ class Task {
     show(x, y) {
         let ctx = drawingContext
         ctx.shadowColor = theme.getColor("Glow").toHex();
-        ctx.shadowBlur = 7.5;
+        ctx.shadowOffsetX = 0.7;
+        ctx.shadowOffsetY = 0.7;
+        ctx.shadowBlur = 1;
 
         let strokeColor = theme.getColor("StrokeSecondary")
         let nameColor = theme.getColor("TextSecondary")
@@ -151,9 +153,11 @@ class Task {
         } else if (mode === "dark") {
             fill(bgColor.toDarkMode().getColor());
         }
-        rect(x, y, 380, 120, 10);
+        rect(x, y, 380, 120, 10); // why aren't these constants?!
         pop();
 
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 0;
         ctx.shadowBlur = 0;
 
         // sets pos of buttons        
@@ -171,6 +175,19 @@ class Task {
         //show move task up/down buttons
         menu.menuButton.show();
 
+        // text highlight
+        let highlightOpacity = 22; // scale of 0-100
+        textSize(NAME_SIZE);
+        let highlightMargin = 5;
+        let highlightWidth = 380 - highlightMargin * 2;
+        let highlightHeight = 120 * 0.38 - highlightMargin;
+        //let highlightWidth = textWidth(this.name) + highlightMargin;
+        //let highlightHeight = textAscent(this.name) * 0.2 + highlightMargin;
+        noStroke()
+        fill(255,255,255,highlightOpacity);
+        rect(x + highlightMargin, y + highlightMargin, highlightWidth, highlightHeight, 10)
+
+        
         strokeWeight(0); //i really do not like using stroke on text, it looks SOOO ugly
         // text slop
         textFont(theme.getFont());

@@ -222,7 +222,9 @@ class List {
     show(x) {
         let ctx = drawingContext
         ctx.shadowColor = theme.getColor("Glow").toHex();
-        ctx.shadowBlur = 10;
+        ctx.shadowOffsetX = 0.7;
+        ctx.shadowOffsetY = 0.7;
+        ctx.shadowBlur = 1;
 
         let borderColor = theme.getColor("StrokePrimary")
         let backgroundColor = theme.getColor("BackgroundSecondary")
@@ -243,6 +245,8 @@ class List {
         let verticalOffsetBottom = 125;
         
         rect(x, verticalOffsetTop, 400, windowHeight - verticalOffsetBottom, 15);
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 0;
         ctx.shadowBlur = 0;
         
         //sets pos of buttons

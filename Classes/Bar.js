@@ -57,7 +57,9 @@ class Bar{
     show(){
         let ctx = drawingContext
         ctx.shadowColor = theme.getColor("Glow").toHex();
-        ctx.shadowBlur = 10;
+        ctx.shadowOffsetX = 0.7;
+        ctx.shadowOffsetY = 0.7;
+        ctx.shadowBlur = 1;
 
         strokeWeight(5)
 
@@ -73,7 +75,9 @@ class Bar{
         }
         
         rect(this.x, this.y, this.width, this.height, this.cornerCouverture);
-        ctx.shadowBlur = 0
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 0;
+        ctx.shadowBlur = 0;
         
         //sets pos of buttons
         let xOffset = 40;
