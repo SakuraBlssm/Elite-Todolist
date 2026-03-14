@@ -195,8 +195,8 @@ class Menu {
         if (!this.taskMenuOpen) {
             return;
         }
-        let bgColor = theme.getColor("BackgroundTertiary")
-        let borderColor = theme.getColor("StrokeSecondary")
+        let bgColor = theme.getPaint("BackgroundTertiary")
+        let borderColor = theme.getPaint("StrokeSecondary")
         const pos = { x: this.x, y: this.y };
 
         // main box
@@ -205,11 +205,11 @@ class Menu {
         this.mainBox.style(`height: ${[this.height]}px`);
         this.mainBox.style("z-index: 2");
         if (mode === "default") {
-            this.mainBox.style(`background-color: ${bgColor.toHex()}`);
-            this.mainBox.style(`border: 3px solid ${borderColor.toHex()}`);
+            this.mainBox.style(`background-color: ${bgColor.getHex()}`);
+            this.mainBox.style(`border: 3px solid ${borderColor.getHex()}`);
         } else if (mode === "dark") {
-            this.mainBox.style(`background-color: ${bgColor.toDarkMode().toHex()}`);
-            this.mainBox.style(`border: 3px solid ${borderColor.toHex()}`);
+            this.mainBox.style(`background-color: ${bgColor.toDarkMode().getHex()}`);
+            this.mainBox.style(`border: 3px solid ${borderColor.getHex()}`);
         }
 
         this.mainBox.style(`border-radius: 10px`);
@@ -230,16 +230,16 @@ class Menu {
             this.moveTaskDownButton
         ]
         
-        let bgClr = theme.getColor("BackgroundSecondary")
-        let textClr = theme.getColor("TextPrimary")
-        let strokeClr = theme.getColor("StrokePrimary")
+        let bgClr = theme.getPaint("BackgroundSecondary")
+        let textClr = theme.getPaint("TextPrimary")
+        let strokeClr = theme.getPaint("StrokePrimary")
         for (let btn of buttons) {
             btn.show()
             btn.style('z-index', '3')
             btn.style('position', 'absolute')
-            btn.style("background-color", bgClr.toHex()); 
-            btn.style("color", textClr.toHex()); 
-            btn.style("border", "2px solid" + strokeClr.toHex()); 
+            btn.style("background-color", bgClr.getHex()); 
+            btn.style("color", textClr.getHex()); 
+            btn.style("border", "2px solid" + strokeClr.getHex()); 
         }
     }
 
@@ -248,8 +248,8 @@ class Menu {
         if (!this.listMenuOpen) {
             return;
         }
-        let bgColor = theme.getColor("BackgroundTertiary")
-        let borderColor = theme.getColor("StrokeSecondary")
+        let bgColor = theme.getPaint("BackgroundTertiary")
+        let borderColor = theme.getPaint("StrokeSecondary")
         const pos = { x: this.parent.x, y: this.y };
 
         // main box
@@ -258,11 +258,11 @@ class Menu {
         this.mainBox.style(`height: ${[this.height]}px`);
         this.mainBox.style("z-index: 2");
         if (mode === "default") {
-            this.mainBox.style(`background-color: ${bgColor.toHex()}`);
-            this.mainBox.style(`border: 3px solid ${borderColor.toHex()}`);
+            this.mainBox.style(`background-color: ${bgColor.getHex()}`);
+            this.mainBox.style(`border: 3px solid ${borderColor.getHex()}`);
         } else if (mode === "dark") {
-            this.mainBox.style(`background-color: ${bgColor.toDarkMode().toHex()}`);
-            this.mainBox.style(`border: 3px solid ${borderColor.toHex()}`);
+            this.mainBox.style(`background-color: ${bgColor.toDarkMode().getHex()}`);
+            this.mainBox.style(`border: 3px solid ${borderColor.getHex()}`);
         }
 
         this.mainBox.style(`border-radius: 10px`);
@@ -295,16 +295,16 @@ class Menu {
             this.moveTaskDownButton
         ]
         
-        let bgClr = theme.getColor("BackgroundSecondary")
-        let textClr = theme.getColor("TextPrimary")
-        let strokeClr = theme.getColor("StrokePrimary")
+        let bgClr = theme.getPaint("BackgroundSecondary")
+        let textClr = theme.getPaint("TextPrimary")
+        let strokeClr = theme.getPaint("StrokePrimary")
         for (let btn of buttons) {
             btn.show()
             btn.style('z-index', '3')
             btn.style('position', 'absolute')
-            btn.style("background-color", bgClr.toHex()); 
-            btn.style("color", textClr.toHex()); 
-            btn.style("border", "2px solid" + strokeClr.toHex()); 
+            btn.style("background-color", bgClr.getHex()); 
+            btn.style("color", textClr.getHex()); 
+            btn.style("border", "2px solid" + strokeClr.getHex()); 
         }
     }
 
