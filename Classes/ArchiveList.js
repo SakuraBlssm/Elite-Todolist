@@ -13,7 +13,7 @@ class ArchiveList extends List {
             ctx.shadowColor = theme.getPaint("Glow").getHex();
             ctx.shadowOffsetX = 0.7;
             ctx.shadowOffsetY = 0.7;
-            ctx.shadowBlur = 1;
+            ctx.shadowBlur = 1 * theme.getData("GlowIntensity");
         }
 
         strokeWeight(5)

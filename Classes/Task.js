@@ -131,7 +131,7 @@ class Task {
             ctx.shadowColor = theme.getPaint("Glow").getHex();
             ctx.shadowOffsetX = 0.7;
             ctx.shadowOffsetY = 0.7;
-            ctx.shadowBlur = 1;
+            ctx.shadowBlur = 1 * theme.getData("GlowIntensity");
         }
 
         let strokeColor = theme.getPaint("StrokeSecondary")
@@ -179,17 +179,20 @@ class Task {
         menu.menuButton.show();
 
         // text highlight
-        let highlightOpacity = 22; // scale of 0-100
-        textSize(NAME_SIZE);
-        let highlightMargin = 5;
-        let highlightWidth = 380 - highlightMargin * 2;
-        let highlightHeight = 120 * 0.38 - highlightMargin;
-        //let highlightWidth = textWidth(this.name) + highlightMargin;
-        //let highlightHeight = textAscent(this.name) * 0.2 + highlightMargin;
-        noStroke()
-        fill(255,255,255,highlightOpacity);
-        rect(x + highlightMargin, y + highlightMargin, highlightWidth, highlightHeight, 10)
-
+        if (theme.getData("HighlightEnabled")) {
+            console.log(theme.getData("HighlightEnabled"))
+            let highlightColor = theme.getPaint("HighlightColor")
+            let highlightOpacity = 22; // scale of 0-100
+            textSize(NAME_SIZE);
+            let highlightMargin = 5;
+            let highlightWidth = 380 - highlightMargin * 2;
+            let highlightHeight = 120 * 0.38 - highlightMargin;
+            //let highlightWidth = textWidth(this.name) + highlightMargin;
+            //let highlightHeight = textAscent(this.name) * 0.2 + highlightMargin;
+            noStroke()
+            fill(highlightColor.R, highlightColor.G, highlightColor.B, highlightOpacity);
+            rect(x + highlightMargin, y + highlightMargin, highlightWidth, highlightHeight, 10)
+        }
         
         strokeWeight(0); //i really do not like using stroke on text, it looks SOOO ugly
         // text slop
@@ -213,7 +216,7 @@ class Task {
         //fill(DEFAULT_WHITE.getRGB());
         //strokeWeight(1);
 
-        this.menu.showTaskMenu();
+        this.menu.showMenu();
     }
 
     static fromJSON(data) {

@@ -6,12 +6,13 @@ class List {
         this.listStorage = [];
 
         this.menu = new Menu(
-            0,
-            0, 
+            30,
+            105, 
             100, 
             105,
             this
         );
+        
         this.titleColor = theme.getPaint("TextPrimary")
         this.backgroundColor = theme.getPaint("BackgroundSecondary")
         this.borderColor = theme.getPaint("StrokePrimary")
@@ -188,7 +189,7 @@ class List {
             ctx.shadowColor = theme.getPaint("Glow").getHex();
             ctx.shadowOffsetX = 0.7;
             ctx.shadowOffsetY = 0.7;
-            ctx.shadowBlur = 1;
+            ctx.shadowBlur = 1 * theme.getData("GlowIntensity");
         }
 
         let borderColor = theme.getPaint("StrokePrimary")
@@ -214,8 +215,19 @@ class List {
         ctx.shadowOffsetY = 0;
         ctx.shadowBlur = 0;
 
+        this.menu.x = x + 30
+
         //sets pos of buttons
         this.menu.menuButton.position(x + 370,verticalOffsetBottom - 17);
+
+        //styles the menu button
+        let buttonBg = theme.getPaint("BackgroundSecondary")
+        let buttonText = theme.getPaint("TextPrimary")
+        let buttonStroke = theme.getPaint("StrokePrimary")
+
+        this.menu.menuButton.style("background-color", buttonBg.getHex()); 
+        this.menu.menuButton.style("color", buttonText.getHex()); 
+        this.menu.menuButton.style("border", "2px solid" + buttonStroke.getHex()); 
 
         //show move task up/down buttons
         this.menu.menuButton.show();
@@ -245,7 +257,7 @@ class List {
             this.showTasks(x)
         }
 
-        this.menu.showListMenu();
+        this.menu.showMenu();
     }
 
     showTasks(x) {

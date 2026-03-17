@@ -1,5 +1,8 @@
 class Theme {
-    constructor(data) { //ik how much i stress readability but i am NOT typing allat
+    constructor(data) {
+        if (!data) {
+            data = {}
+        }
         //text slop
         this.TextPrimary         = data.TextPrimary          || new Paint()
         this.TextSecondary       = data.TextSecondary        || new Paint()
@@ -16,10 +19,16 @@ class Theme {
 
         //glow/shadow
         this.Glow                = data.Glow                 || new Paint(0,0,0)
+        this.GlowIntensity       = data.GlowIntensity        || 1
+        this.GlowEnabled         = data.GlowEnabled          || false
+
+        //highlight
+        this.HighlightColor      = data.HighlightColor       || new Paint(255,255,255)
+        this.HighlightEnabled    = data.HighlightEnabled     || false
+        this.HighlightOpacity    = data.HighlightOpacity     || 22
 
         //misc data
         this.Font                = data.Font                 || "Arial"
-        this.GlowEnabled         = data.GlowEnabled          || true
     }
 
     getPaint(colorName) {
@@ -31,17 +40,12 @@ class Theme {
 
         //pick random if its a list
         let randInt = Math.floor(Math.random() * colorVal.length)
-        console.log(randInt)
 
         return colorVal[randInt]
     }
 
     getData(dataName) {
-        if (!this[dataName]) {
-            throw new Error(`${dataName} is not a member of this theme!`);
-            
-        }
-        return this.Font
+        return this[dataName]
     }
 
     //might be redundant later due to custom dark themes
@@ -77,7 +81,10 @@ class Theme {
 }
 
 const PresetThemes = {
-    Default: new Theme(),
+    Default: new Theme({
+        GlowEnabled: true,
+        HighlightEnabled: true
+    }),
     Classic: new Theme({
         BackgroundTertiary: [
             new Paint(58, 110, 165), 
@@ -92,7 +99,8 @@ const PresetThemes = {
             // new Paint(52, 78, 65)
         ],
         Font: "Courier New",
-        GlowEnabled: false
+        GlowEnabled: false,
+        HighlightEnabled: false
     }),
     Sakura: new Theme({
         TextPrimary: new Paint(255, 229, 236),
@@ -103,8 +111,8 @@ const PresetThemes = {
         BackgroundPrimary: new Paint(255, 194, 209),
         BackgroundSecondary: new Paint(82, 53, 25),   
         BackgroundTertiary: new Paint(255, 229, 236),
-        Glow: new Paint(0, 0, 0),      
-        Font: "Arial"                  
+        GlowEnabled: true,
+        HighlightEnabled: true
     }),
     //TODO: MY DELICATE RETINAS!!!! THEY BURN!!!!!
     SakuraPrime: new Theme({ 
@@ -117,7 +125,9 @@ const PresetThemes = {
         BackgroundSecondary: new Paint(255, 117, 239),
         BackgroundTertiary: new Paint(255, 255, 255),
         Glow: new Paint(255, 0, 255),  
-        Font: "Arial"                  
+        GlowIntensity: 10,
+        GlowEnabled: true,
+        HighlightEnabled: true
     }),
     V1sDream: new Theme({
         TextPrimary: new Paint(10, 30, 52), 
@@ -129,7 +139,10 @@ const PresetThemes = {
         BackgroundSecondary: new Paint(199, 31, 55),
         BackgroundTertiary: new Paint(100, 18, 32),
         Glow: new Paint(255, 0, 0),  
-        Font: "Arial",               
+        HighlightColor: new Paint(255,0,0),
+        GlowIntensity: 5,
+        GlowEnabled: true,
+        HighlightEnabled: true
     }),
     DeepBlue: new Theme({
         TextPrimary: new Paint(70, 143, 175),
@@ -140,8 +153,8 @@ const PresetThemes = {
         BackgroundPrimary: new Paint(1, 58, 99),   
         BackgroundSecondary: new Paint(1, 42, 74),   
         BackgroundTertiary: new Paint(1, 73, 124),  
-        Glow: new Paint(0, 0, 0),     
-        Font: "Arial",                
+        GlowEnabled: true,
+        HighlightEnabled: true
     }),
     "1x1x1x1": new Theme({
         TextPrimary: new Paint(255,0,0),      
@@ -153,7 +166,9 @@ const PresetThemes = {
         BackgroundSecondary: new Paint(11, 101, 11),  
         BackgroundTertiary: new Paint(0, 0, 0),      
         Glow: new Paint(0, 255, 0),    
-        Font: "Arial"                  
+        GlowIntensity: 10,
+        GlowEnabled: true,
+        HighlightEnabled: false
     }),
     UltraGreen: new Theme({
         TextPrimary: new Paint(0, 114, 0),   
@@ -165,7 +180,8 @@ const PresetThemes = {
         BackgroundSecondary: new Paint(158, 240, 26),
         BackgroundTertiary: new Paint(112, 224, 0), 
         Glow: new Paint(0, 255, 0),   
-        Font: "Arial",                
+        GlowEnabled: true,
+        HighlightEnabled: true
     }),
     SmileOS: new Theme({
         TextPrimary: new Paint(255,255,255),
@@ -176,7 +192,8 @@ const PresetThemes = {
         BackgroundPrimary: new Paint(0,0,0),
         BackgroundSecondary: new Paint(0,0,0),
         BackgroundTertiary: new Paint(0,0,0),
-        GlowEnabled: false
+        GlowEnabled: false,
+        HighlightEnabled: false
     })
 }
 
